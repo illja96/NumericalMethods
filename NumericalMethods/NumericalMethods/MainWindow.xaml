@@ -7,19 +7,22 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="400" Width="600">
     <Grid>
-        <Menu x:Name="menu" Height="32" VerticalAlignment="Top">
-            <MenuItem Header="File">
-                <MenuItem Header="Open file" Name="MenuItem_open_file" Click="MenuItem_open_file_Click"/>
-                <MenuItem Header="Save to file" Name="MenuItem_save_to_file" Click="MenuItem_save_to_file_Click"/>
+        <Menu x:Name="menu" Height="18" VerticalAlignment="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Открыть файл" Name="MenuItem_open_file" Click="MenuItem_open_file_Click"/>
+                <MenuItem Header="Сохранить в файл" Name="MenuItem_save_to_file" Click="MenuItem_save_to_file_Click"/>
             </MenuItem>
-            <MenuItem Header="Methods">
-                <MenuItem Header="Gauss with main element" Name="MenuItem_gauss_with_main_element" IsCheckable="True" Click="MenuItem_gauss_with_main_element_Click"/>
-                <MenuItem Header="Gauss-Seidel" Name="MenuItem_gauss_seidel" IsCheckable="True" Click="MenuItem_gauss_seidel_Click"/>
+            <MenuItem Header="Методы">
+                <MenuItem Header="Метод Гаусса с выбором главного элемента" Name="MenuItem_gauss_with_main_element" IsCheckable="True" Click="MenuItem_gauss_with_main_element_Click"/>
+                <MenuItem Header="Метод Гаусса-Зейделя" Name="MenuItem_gauss_seidel" IsCheckable="True" Click="MenuItem_gauss_seidel_Click"/>
             </MenuItem>
-            <MenuItem Header="Calculate" Name="MenuItem_calculate" IsEnabled="False" Click="MenuItem_calculate_Click"/>
-            <MenuItem Header="Help" Name="MenuItem_help" Click="MenuItem_help_Click"/>
+            <MenuItem Header="Вычислить" Name="MenuItem_calculate" IsEnabled="False" Click="MenuItem_calculate_Click"/>
+            <MenuItem Header="Помощь" Name="MenuItem_help" Click="MenuItem_help_Click"/>
         </Menu>
 
-        <DataGrid x:Name="dataGrid" Margin="10,54,10,10"/>        
+        <TextBox Name="textBox_size" Height="23" Margin="0,23,143,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64"/>
+        <Button Name="button_size" Content="Сгенерировать" Margin="0,23,10,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Right" Width="128" Click="button_size_Click"/>
+
+        <DataGrid Name="dataGrid_matrix" Margin="10,51,10,10"/>
     </Grid>
 </Window>
