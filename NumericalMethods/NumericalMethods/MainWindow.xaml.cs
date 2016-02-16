@@ -22,16 +22,18 @@ namespace NumericalMethods
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<object> matrix_values;
+        private List<object> matrix_values; 
 
         public MainWindow()
         {
             InitializeComponent();
 
             matrix_values = new List<object>();
-        }
 
-        private void MenuItem_open_file_Click(object sender, RoutedEventArgs e)
+
+    }
+
+    private void MenuItem_open_file_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog open_file = new OpenFileDialog();
             open_file.DefaultExt = Directory.GetCurrentDirectory();
@@ -61,7 +63,31 @@ namespace NumericalMethods
         {
             if (MenuItem_gauss_with_main_element.IsChecked == true)
             {
-                Methods.Gauss_with_main_element();
+                double[,] myArr = new double[3, 4];
+
+                Random ran = new Random();
+
+                for (int i = 0; i < 3; i++)
+                {
+                    for (int j = 0; j < 4; j++)
+                    {
+                        myArr[i, j] = ran.Next(1, 9);
+                    }
+                }
+
+                double[] x = new double[3];
+
+
+                 x=Methods.Gauss_with_main_element(myArr, 3);
+
+                textBox_size.Clear();
+
+                foreach (double d in x)
+                {
+                    textBox_size.Text += d.ToString() + ";";
+                }
+
+
             }
 
             if (MenuItem_gauss_seidel.IsChecked == true)
