@@ -28,8 +28,7 @@ namespace NumericalMethods
         {
             InitializeComponent();
 
-            matrix_values = new List<object>();
-
+            matrix_values = new List<object>();         
 
     }
 
@@ -51,16 +50,22 @@ namespace NumericalMethods
             MenuItem_calculate.IsEnabled = true;
             MenuItem_gauss_with_main_element.IsChecked = true;
             MenuItem_gauss_seidel.IsChecked = false;
+
+            textBox_result.Clear();
         }
         private void MenuItem_gauss_seidel_Click(object sender, RoutedEventArgs e)
         {
             MenuItem_calculate.IsEnabled = true;
             MenuItem_gauss_with_main_element.IsChecked = false;
             MenuItem_gauss_seidel.IsChecked = true;
+
+            textBox_result.Clear();
         }
 
         private void MenuItem_calculate_Click(object sender, RoutedEventArgs e)
         {
+            textBox_result.Clear();
+
             if (MenuItem_gauss_with_main_element.IsChecked == true)
             {
                 double[,] myArr = new double[3, 4];
@@ -71,21 +76,29 @@ namespace NumericalMethods
                 {
                     for (int j = 0; j < 4; j++)
                     {
-                        myArr[i, j] = ran.Next(1, 9);
+                        myArr[i, j] = ran.Next(0, 9);
                     }
                 }
 
-                double[] x = new double[3];
+                double[] x = new double[3];          
 
-
-                 x=Methods.Gauss_with_main_element(myArr, 3);
-
-                textBox_size.Clear();
-
-                foreach (double d in x)
+                if (Methods.Gauss_with_main_element(myArr, 3)==null)
                 {
-                    textBox_size.Text += d.ToString() + ";";
+                    textBox_result.Text = "Данная система не имеет решений!";
                 }
+                else
+                {
+                    x = Methods.Gauss_with_main_element(myArr, 3);
+
+                    foreach (double d in x)
+                    {
+                        textBox_result.Text += d.ToString() + ";";
+                    }
+                }
+                 
+
+                
+
 
 
             }

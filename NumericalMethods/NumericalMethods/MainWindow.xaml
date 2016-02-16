@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NumericalMethods"
         mc:Ignorable="d"
-        Title="MainWindow" Height="400" Width="600">
+        Title="MainWindow" Height="384" Width="600">
     <Grid>
         <Menu x:Name="menu" Height="18" VerticalAlignment="Top">
             <MenuItem Header="Файл">
@@ -23,6 +23,8 @@
         <TextBox Name="textBox_size" Height="23" Margin="0,23,143,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64"/>
         <Button Name="button_size" Content="Сгенерировать" Margin="0,23,10,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Right" Width="128" Click="button_size_Click"/>
 
-        <DataGrid Name="dataGrid_matrix" Margin="10,51,10,10"/>
+        <DataGrid Name="dataGrid_matrix" Margin="10,51,10,0" Height="213" VerticalAlignment="Top"/>
+        <Label x:Name="label" Content="Результат" HorizontalAlignment="Left" Margin="10,0,0,58" Width="84" Height="26" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="textBox_result" Height="38" Margin="10,0,10,16" TextWrapping="Wrap" VerticalAlignment="Bottom" AllowDrop="False" Background="#FFECE9E9" IsReadOnly="True" MaxLines="1" FontSize="16"/>
     </Grid>
 </Window>
