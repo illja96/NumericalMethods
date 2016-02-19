@@ -16,15 +16,18 @@
                 <MenuItem Header="Метод Гаусса с выбором главного элемента" Name="MenuItem_gauss_with_main_element" IsCheckable="True" Click="MenuItem_gauss_with_main_element_Click"/>
                 <MenuItem Header="Метод Гаусса-Зейделя" Name="MenuItem_gauss_seidel" IsCheckable="True" Click="MenuItem_gauss_seidel_Click"/>
             </MenuItem>
-            <MenuItem Header="Вычислить" Name="MenuItem_calculate" IsEnabled="False" Click="MenuItem_calculate_Click"/>
-            <MenuItem Header="Помощь" Name="MenuItem_help" Click="MenuItem_help_Click"/>
+            <MenuItem Header="Вычислить" Name="MenuItem_calculate" Click="MenuItem_calculate_Click"/>
         </Menu>
 
-        <TextBox Name="textBox_size" Height="23" Margin="0,23,143,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" HorizontalAlignment="Right" Width="64"/>
-        <Button Name="button_size" Content="Сгенерировать" Margin="0,23,10,0" VerticalAlignment="Top" Height="23" HorizontalAlignment="Right" Width="128" Click="button_size_Click"/>
+        <Label Name="label_size" Content="Размер:" HorizontalAlignment="Left" Margin="10,23,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="textBox_size" Height="26" Margin="68,23,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" HorizontalAlignment="Left" Width="70"/>
+        <Button Name="button_size" Content="Сгенерировать" Margin="10,54,0,0" VerticalAlignment="Top" Height="23" Click="button_size_Click" HorizontalAlignment="Left" Width="128"/>
 
-        <DataGrid Name="dataGrid_matrix" Margin="10,51,10,0" Height="213" VerticalAlignment="Top"/>
-        <Label x:Name="label" Content="Результат" HorizontalAlignment="Left" Margin="10,0,0,58" Width="84" Height="26" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="textBox_result" Height="38" Margin="10,0,10,16" TextWrapping="Wrap" VerticalAlignment="Bottom" AllowDrop="False" Background="#FFECE9E9" IsReadOnly="True" MaxLines="1" FontSize="16"/>
+        <Label Name="label_accuracy" Content="Точность:" HorizontalAlignment="Left" Margin="10,113,0,0" VerticalAlignment="Top"/>
+        <TextBox Name="textBox_accuracy" HorizontalAlignment="Left" Height="26" Margin="78,113,0,0" TextWrapping="Wrap" Text="0.01" VerticalAlignment="Top" Width="60"/>
+
+        <Button Name="button_random_matrix" Content="Заполнить&#xa;случайными данными" HorizontalAlignment="Left" Margin="10,175,0,0" VerticalAlignment="Top" Width="128" Click="button_random_matrix_Click"/>
+
+        <DataGrid Name="dataGrid_matrix" Margin="143,23,10,0" Height="320" VerticalAlignment="Top"/>
     </Grid>
 </Window>
