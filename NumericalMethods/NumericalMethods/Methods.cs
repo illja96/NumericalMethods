@@ -88,7 +88,7 @@ namespace NumericalMethods
 
         public static double[] Gauss_seidel(double[][] matrix, double accuracy)
         {
-            int size = matrix.Length - 1;
+            int size = matrix.Length;
 
             double[] prev_solves = new double[matrix.Length];
             double[] next_solves = new double[matrix.Length];
@@ -106,10 +106,10 @@ namespace NumericalMethods
 
             do
             {
-                for (int i = 0; i < size - 1; i++)
+                for (int i = 0; i < size + 1; i++)
                     prev_solves[i] = next_solves[i];
 
-                for (int i = 0; i < size - 1; i++)
+                for (int i = 0; i < size + 1; i++)
                 {
                     double var = 0;
                     for (int j = 0; j < i; j++)
@@ -141,7 +141,7 @@ namespace NumericalMethods
 
         public static bool DiagonallyDominant(double[][] matrix)
         {
-            bool diagonal = false;
+            bool diagonal = true;
             for (int i = 0; i < matrix.Length; i++)
             {
                 double sum = 0;
@@ -152,9 +152,9 @@ namespace NumericalMethods
                         sum += Math.Abs(matrix[i][j]);
                     }
                 }
-                if (Math.Abs(matrix[i][i]) >= sum)
+                if (Math.Abs(matrix[i][i]) < sum)
                 {
-                    diagonal = true;
+                    diagonal = false;
                     break;
                 }
             }

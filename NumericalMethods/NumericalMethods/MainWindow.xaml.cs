@@ -238,8 +238,8 @@ namespace NumericalMethods
             }
 
             double accuracy = double.NaN;
-            if (textBox_accuracy.Text.Contains(".") == true)
-                textBox_accuracy.Text = textBox_accuracy.Text.Replace(".", ",");
+            if (textBox_accuracy.Text.Contains(",") == true)
+                textBox_accuracy.Text = textBox_accuracy.Text.Replace(",", ".");
             if (double.TryParse(textBox_accuracy.Text, out accuracy))
             {
                 MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
