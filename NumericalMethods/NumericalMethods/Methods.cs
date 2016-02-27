@@ -11,7 +11,7 @@ namespace NumericalMethods
     {
         public static double[] Gauss_with_main_element(double[][] matrix)
         {
-            int size = matrix.Length-1;
+            int size = matrix.Length;
 
             double main = 0;
             int m = 0;
@@ -88,7 +88,7 @@ namespace NumericalMethods
 
         public static double[] Gauss_seidel(double[][] matrix, double accuracy)
         {
-            int size = matrix.Length-1;
+            int size = matrix.Length - 1;
 
             double[] prev_solves = new double[matrix.Length];
             double[] next_solves = new double[matrix.Length];
@@ -99,17 +99,17 @@ namespace NumericalMethods
                 next_solves[i] = 0;
             }
 
-            for (int i=0;i<size; i++)
+            for (int i = 0; i < size; i++)
             {
-                b[i] = matrix[i][size+1];
+                b[i] = matrix[i][size + 1];
             }
-                
+
             do
             {
-                for (int i = 0; i < size-1; i++)
+                for (int i = 0; i < size - 1; i++)
                     prev_solves[i] = next_solves[i];
 
-                for (int i = 0; i < size-1; i++)
+                for (int i = 0; i < size - 1; i++)
                 {
                     double var = 0;
                     for (int j = 0; j < i; j++)
@@ -122,7 +122,7 @@ namespace NumericalMethods
             while (!Сonverge(next_solves, prev_solves, size, accuracy));
 
 
-          //  double[] roots = new double[matrix.Length];
+            //  double[] roots = new double[matrix.Length];
 
             return next_solves;
         }
