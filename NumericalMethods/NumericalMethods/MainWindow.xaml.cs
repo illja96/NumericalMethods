@@ -146,6 +146,18 @@ namespace NumericalMethods
             double[] roots = null;
             double[][] matrix = Get_matrix_from_dataGrid().ToArray();
 
+            //здесь я вывожу то, что находится в matrix
+            //и столбца В там нет. Метод Гаусса-Зейделя не работает
+
+            string str = "";
+            for (int i = 0; i < matrix.Length; i++)
+                for (int j = 0; j < matrix.Length; j++)
+                    str += matrix[i][j];
+
+            MessageBox.Show(str);
+            
+            //
+
             if (Methods.DiagonallyDominant(matrix) == true)
             {
                 MessageBox.Show("Матрица имеет диагональное преобладание.");
