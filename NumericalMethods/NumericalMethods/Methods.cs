@@ -11,7 +11,7 @@ namespace NumericalMethods
     {
         public static double[] Gauss_with_main_element(double[][] matrix)
         {
-            int size = matrix.Length;
+            int size = matrix.Length-1;
 
             double main = 0;
             int m = 0;
@@ -88,11 +88,77 @@ namespace NumericalMethods
 
         public static double[] Gauss_seidel(double[][] matrix, double accuracy)
         {
-            int size = matrix.Length;
+            int size = matrix.Length-1;
 
-            double[] roots = new double[matrix.Length];
+            double[] prev_solves = new double[matrix.Length];
+            double[] next_solves = new double[matrix.Length];
+            double[] b = new double[matrix.Length];
 
-            return roots;
+            for (int i = 0; i < size; i++)
+            {
+                next_solves[i] = 0;
+            }
+
+            for (int i=0;i<size; i++)
+            {
+                b[i] = matrix[i][size+1];
+            }
+                
+            do
+            {
+                for (int i = 0; i < size-1; i++)
+                    prev_solves[i] = next_solves[i];
+
+                for (int i = 0; i < size-1; i++)
+                {
+                    double var = 0;
+                    for (int j = 0; j < i; j++)
+                        var += (matrix[i][j] * next_solves[j]);
+                    for (int j = i + 1; j < size; j++)
+                        var += (matrix[i][j] * prev_solves[j]);
+                    next_solves[i] = (b[i] - var) / matrix[i][i];
+                }
+            }
+            while (!Сonverge(next_solves, prev_solves, size, accuracy));
+
+
+          //  double[] roots = new double[matrix.Length];
+
+            return next_solves;
+        }
+
+        public static bool Сonverge(double[] next_solves, double[] prev_solves, int size, double accuracy)
+        {
+            double norm = 0;
+            for (int i = 0; i < size; i++)
+            {
+                norm += (next_solves[i] - prev_solves[i]) * (next_solves[i] - prev_solves[i]);
+            }
+            if (Math.Sqrt(norm) >= accuracy)
+                return false;
+            return true;
+        }
+
+        public static bool DiagonallyDominant(double[][] matrix)
+        {
+            bool diagonal = false;
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                double sum = 0;
+                for (int j = 0; j < matrix.Length; j++)
+                {
+                    if (i != j)
+                    {
+                        sum += Math.Abs(matrix[i][j]);
+                    }
+                }
+                if (Math.Abs(matrix[i][i]) >= sum)
+                {
+                    diagonal = true;
+                    break;
+                }
+            }
+            return diagonal;
         }
     }
 }
