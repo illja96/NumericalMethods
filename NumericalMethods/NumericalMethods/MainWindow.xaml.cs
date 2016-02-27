@@ -144,28 +144,7 @@ namespace NumericalMethods
             }
 
             double[] roots = null;
-            double[][] matrix = Get_matrix_from_dataGrid().ToArray();
-
-            //здесь я вывожу то, что находится в matrix
-            //и столбца В там нет. Метод Гаусса-Зейделя не работает
-
-            string str = "";
-            for (int i = 0; i < matrix.Length; i++)
-                for (int j = 0; j < matrix.Length; j++)
-                    str += matrix[i][j];
-
-            MessageBox.Show(str);
-            
-            //
-
-            if (Methods.DiagonallyDominant(matrix) == true)
-            {
-                MessageBox.Show("Матрица имеет диагональное преобладание.");
-            }
-            else
-            {
-                MessageBox.Show("Матрица не имеет диагонального преобладания.");
-            }
+            double[][] matrix = Get_matrix_from_dataGrid();
 
             if (MenuItem_gauss_with_main_element.IsChecked == true)
             {
@@ -174,14 +153,31 @@ namespace NumericalMethods
 
             if (MenuItem_gauss_seidel.IsChecked == true)
             {
-                double accuracy = double.NaN;
-                if (double.TryParse(textBox_accuracy.Text, out accuracy))
+                double accuracy = Get_accuracy();
+                if (accuracy == double.NaN)
                 {
                     MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
-                
+                //здесь я вывожу то, что находится в matrix
+                //и столбца В там нет. Метод Гаусса-Зейделя не работает
+
+                string str = "";
+                for (int i = 0; i < matrix.Length; i++)
+                {
+                    for (int j = 0; j < matrix[i].Length; j++)
+                        str += matrix[i][j] + "\t";
+
+                    str += "\n";
+                }
+
+                MessageBox.Show(str);
+
+                if (Methods.DiagonallyDominant(matrix) == true)
+                    MessageBox.Show("Матрица имеет диагональное преобладание.");
+                else
+                    MessageBox.Show("Матрица не имеет диагонального преобладания.");
 
                 roots = Methods.Gauss_seidel(Get_matrix_from_dataGrid(), accuracy);
             }
@@ -201,12 +197,42 @@ namespace NumericalMethods
             matrix_values.Clear();
 
             int size = -1;
-            if(int.TryParse(textBox_size.Text, out size) == false)
+            if (int.TryParse(textBox_size.Text, out size) == false)
             {
                 MessageBox.Show("Некорректно задан размер генерируемой матрицы!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
-            }            
+            }
             Generate_dataGrid(size);
+        }
+
+        private void button_random_matrix_Click(object sender, RoutedEventArgs e)
+        {
+            if (matrix_values.Count == 0)
+            {
+                MessageBox.Show("Матрица значений не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            double accuracy = Get_accuracy();
+            if (accuracy == double.NaN)
+            {
+                MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            int accuracy_count = 0;
+            for (; accuracy != Math.Round(accuracy); accuracy_count++)
+                accuracy *= 10;
+
+            Random rand = new Random();
+
+            for (int i = 0; i < matrix_values.Count; i++)
+            {
+                for (int j = 0; j < matrix_values[i].Length; j++)
+                    matrix_values[i][j] = Math.Round(rand.NextDouble() * rand.Next(-10, 10), accuracy_count);
+            }
+
+            dataGrid_matrix.Items.Refresh();
         }
         private void Generate_dataGrid(int size)
         {
@@ -241,43 +267,20 @@ namespace NumericalMethods
             }
         }
 
-        private void button_random_matrix_Click(object sender, RoutedEventArgs e)
-        {
-            if (matrix_values.Count == 0)
-            {
-                MessageBox.Show("Матрица значений не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            double accuracy = double.NaN;
-            if (textBox_accuracy.Text.Contains(",") == true)
-                textBox_accuracy.Text = textBox_accuracy.Text.Replace(",", ".");
-            if (double.TryParse(textBox_accuracy.Text, out accuracy))
-            {
-                MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-            int accuracy_count = 0;
-            for (; accuracy != Math.Round(accuracy); accuracy_count++)
-                accuracy *= 10;
-
-            Random rand = new Random();
-
-            for (int i = 0; i < matrix_values.Count; i++)
-            {
-                for (int j = 0; j < matrix_values[i].Length; j++)
-                    matrix_values[i][j] = Math.Round(rand.NextDouble() * rand.Next(-10, 10), accuracy_count);
-            }
-
-            dataGrid_matrix.Items.Refresh();
-        }
-
         private double[][] Get_matrix_from_dataGrid()
         {
             if (matrix_values.Count == 0)
                 return null;
 
             return matrix_values.ToArray();
+        }
+        private double Get_accuracy()
+        {
+            double accuracy = double.NaN;
+            if (double.TryParse(textBox_accuracy.Text.Replace(".", ","), out accuracy) && double.TryParse(textBox_accuracy.Text.Replace(",", "."), out accuracy))
+                return double.NaN;
+
+            return accuracy;
         }
 
         private void Show_roots(double[] roots)
