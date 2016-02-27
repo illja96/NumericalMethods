@@ -146,6 +146,15 @@ namespace NumericalMethods
             double[] roots = null;
             double[][] matrix = Get_matrix_from_dataGrid().ToArray();
 
+            if (Methods.DiagonallyDominant(matrix) == true)
+            {
+                MessageBox.Show("Матрица имеет диагональное преобладание.");
+            }
+            else
+            {
+                MessageBox.Show("Матрица не имеет диагонального преобладания.");
+            }
+
             if (MenuItem_gauss_with_main_element.IsChecked == true)
             {
                 roots = Methods.Gauss_with_main_element(matrix);
@@ -159,6 +168,8 @@ namespace NumericalMethods
                     MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                
 
                 roots = Methods.Gauss_seidel(Get_matrix_from_dataGrid(), accuracy);
             }
