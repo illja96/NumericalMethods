@@ -172,7 +172,9 @@ namespace NumericalMethods
                     str += "\n";
                 }
 
-                MessageBox.Show(str);
+                
+
+                MessageBox.Show(str+ "Norma="+Methods.Norma(matrix).ToString(), matrix.Length.ToString());
 
                 if (Methods.Diagonally_dominant(matrix) == true)
                     MessageBox.Show("Матрица имеет диагональное преобладание.");

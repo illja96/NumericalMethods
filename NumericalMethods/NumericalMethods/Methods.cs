@@ -90,53 +90,77 @@ namespace NumericalMethods
         {
             int size = matrix.Length;
 
-            double[] prev_solves = new double[matrix.Length];
-            double[] next_solves = new double[matrix.Length];
-            double[] b = new double[matrix.Length];
+            double maxIter = 0;
+            //   
 
-            for (int i = 0; i < size; i++)
+            double[][] B = new double[size][];
+            double[][] d = new double[size][];
+
+
+            if (Diagonally_dominant(matrix) == true)
             {
-                next_solves[i] = 0;
-            }
-
-            for (int i = 0; i < size; i++)
-            {
-                b[i] = matrix[i][size + 1];
-            }
-
-            do
-            {
-                for (int i = 0; i < size + 1; i++)
-                    prev_solves[i] = next_solves[i];
-
-                for (int i = 0; i < size + 1; i++)
+                for(int i=0;i< size; i++)
                 {
-                    double var = 0;
-                    for (int j = 0; j < i; j++)
-                        var += (matrix[i][j] * next_solves[j]);
-                    for (int j = i + 1; j < size; j++)
-                        var += (matrix[i][j] * prev_solves[j]);
-                    next_solves[i] = (b[i] - var) / matrix[i][i];
+                    for (int j = 0; j < size; j++)
+                    {
+                        if (i == j)
+                        {
+                            B[i][j] = 0;
+                        }
+                        else
+                        {
+                            B[i][j] = (-matrix[i][j]) / matrix[i][i];
+                        }
+                    }
+
+                    d[i][1] = matrix[i][size] / matrix[i][i];
                 }
+
+                if (Norma(B) < 1)
+                {                  
+                    maxIter = ((1 / (Math.Log10(Norma(B)))) * (Math.Log10(accuracy) - Math.Log10(Norma(d)) + Math.Log10(1 - Norma(B)))) - 1;
+                }
+                else
+                {
+                    return null;
+                }
+
+                double[] roots = new double[size];
+                
+                //algorithm
+
+
+
+                return roots;
+
             }
-            while (!Сonverge(next_solves, prev_solves, size, accuracy));
+            else
+            {
+                return null;
+            }
 
-
-            //  double[] roots = new double[matrix.Length];
-
-            return next_solves;
+           // return roots;
         }
 
-        public static bool Сonverge(double[] next_solves, double[] prev_solves, int size, double accuracy)
+        public static double Norma(double[][] matrix)
         {
-            double norm = 0;
-            for (int i = 0; i < size; i++)
+            double norma = 0;
+            double max = 0;
+
+            for(int i = 0; i < matrix.Length; i++)
             {
-                norm += (next_solves[i] - prev_solves[i]) * (next_solves[i] - prev_solves[i]);
-            }
-            if (Math.Sqrt(norm) >= accuracy)
-                return false;
-            return true;
+                max = 0;
+                for (int j = 0; j < matrix.Length; j++)
+                {
+                    max += Math.Abs(matrix[i][j]);
+                }
+                if (max > norma)
+                {
+                    norma = max;
+                }
+                    
+            }               
+            return norma;
         }
 
         public static bool Diagonally_dominant(double[][] matrix)
