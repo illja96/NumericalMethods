@@ -174,7 +174,7 @@ namespace NumericalMethods
 
                 MessageBox.Show(str);
 
-                if (Methods.DiagonallyDominant(matrix) == true)
+                if (Methods.Diagonally_dominant(matrix) == true)
                     MessageBox.Show("Матрица имеет диагональное преобладание.");
                 else
                     MessageBox.Show("Матрица не имеет диагонального преобладания.");

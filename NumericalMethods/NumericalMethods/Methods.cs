@@ -139,26 +139,23 @@ namespace NumericalMethods
             return true;
         }
 
-        public static bool DiagonallyDominant(double[][] matrix)
+        public static bool Diagonally_dominant(double[][] matrix)
         {
-            bool diagonal = true;
+            double sum = 0;
             for (int i = 0; i < matrix.Length; i++)
             {
-                double sum = 0;
+                sum = 0;
                 for (int j = 0; j < matrix.Length; j++)
                 {
                     if (i != j)
-                    {
                         sum += Math.Abs(matrix[i][j]);
-                    }
                 }
+
                 if (Math.Abs(matrix[i][i]) < sum)
-                {
-                    diagonal = false;
-                    break;
-                }
+                    return false;
             }
-            return diagonal;
+
+            return true;
         }
     }
 }
