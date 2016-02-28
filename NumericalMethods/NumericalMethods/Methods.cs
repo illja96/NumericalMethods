@@ -93,9 +93,10 @@ namespace NumericalMethods
             double maxIter = 0;
             //   
 
-            double[][] B = new double[size][];
-            double[][] d = new double[size][];
+            double[,] B = new double[size, size];
+            double[,] d = new double [size, size];
 
+            //it solves only for diagonally dominant matrix, but I have a stupid mistake...
 
             if (Diagonally_dominant(matrix) == true)
             {
@@ -105,15 +106,15 @@ namespace NumericalMethods
                     {
                         if (i == j)
                         {
-                            B[i][j] = 0;
+                            B[i,j] = 0;
                         }
                         else
                         {
-                            B[i][j] = (-matrix[i][j]) / matrix[i][i];
+                            B[i,j] = (-matrix[i][j]) / matrix[i][i];
                         }
                     }
 
-                    d[i][1] = matrix[i][size] / matrix[i][i];
+                    d[i,1] = matrix[i][size] / matrix[i][i];
                 }
 
                 if (Norma(B) < 1)
@@ -125,21 +126,48 @@ namespace NumericalMethods
                     return null;
                 }
 
-                double[] roots = new double[size];
-                
+                double[] prev_solves = new double[size];
+                double[] next_solves = new double[size];
+
+                for (int i = 0; i < size; i++)
+                {
+                    prev_solves[i] = 0;
+                    next_solves[i] = 0;
+                }
+
                 //algorithm
 
+                int k = 0;
+                double diff = 0;
+                double s = 0;
+                double Xi = 0;
 
+                while ((k <= maxIter) && (diff >= accuracy))
+                {
+                    k = k + 1;
+                    for (int i = 0; i < size; i++)
+                    {
+                        s = 0;
+                        for (int j = 0; j < size; j++)
+                        {
+                            if (i != j)
+                            {
+                                s += matrix[i][j] * next_solves[j];
+                            }
+                        }
+                        Xi = (prev_solves[i] - s) / matrix[i][i];
+                        diff = Math.Abs(Xi - next_solves[i]);
+                        next_solves[i] = Xi;
+                    }
+                }
 
-                return roots;
+                return next_solves;
 
             }
             else
             {
                 return null;
             }
-
-           // return roots;
         }
 
         public static double Norma(double[][] matrix)
@@ -162,6 +190,27 @@ namespace NumericalMethods
             }               
             return norma;
         }
+
+        public static double Norma(double[,] matrix)
+        {
+            double norma = 0;
+            double max = 0;
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                max = 0;
+                for (int j = 0; j < matrix.Length-1; j++)
+                {
+                    max += Math.Abs(matrix[i,j]);
+                }
+                if (max > norma)
+                {
+                    norma = max;
+                }
+
+            }
+            return norma;
+        } //Norma for matrix B and d
 
         public static bool Diagonally_dominant(double[][] matrix)
         {
