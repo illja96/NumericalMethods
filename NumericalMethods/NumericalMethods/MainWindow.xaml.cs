@@ -68,6 +68,8 @@ namespace NumericalMethods
                         matrix_values[i][j] = matrix[i][j];
                 }
                 dataGrid_matrix.Items.Refresh();
+
+                file_reader.Close();
             }
             catch (Exception ex)
             {
