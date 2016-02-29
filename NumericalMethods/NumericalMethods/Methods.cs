@@ -93,10 +93,14 @@ namespace NumericalMethods
             double maxIter = 0;
             //   
 
-            double[,] B = new double[size, size];
-            double[,] d = new double [size, size];
+            double[][] B = new double[size][];
+            double[][] d = new double[size][];
 
-            //it solves only for diagonally dominant matrix, but I have a stupid mistake...
+            for (int i = 0; i < size; i++)
+            {
+                B[i] = new double[size];
+                d[i] = new double[1];
+            }         
 
             if (Diagonally_dominant(matrix) == true)
             {
@@ -106,15 +110,15 @@ namespace NumericalMethods
                     {
                         if (i == j)
                         {
-                            B[i,j] = 0;
+                            B[i][j] = 0;
                         }
                         else
                         {
-                            B[i,j] = (-matrix[i][j]) / matrix[i][i];
+                            B[i][j] = (-matrix[i][j]) / matrix[i][i];
                         }
                     }
 
-                    d[i,1] = matrix[i][size] / matrix[i][i];
+                    d[i][0] = matrix[i][size] / matrix[i][i];
                 }
 
                 if (Norma(B) < 1)
@@ -178,7 +182,7 @@ namespace NumericalMethods
             for(int i = 0; i < matrix.Length; i++)
             {
                 max = 0;
-                for (int j = 0; j < matrix.Length; j++)
+                for (int j = 0; j < matrix[i].Length-1; j++)
                 {
                     max += Math.Abs(matrix[i][j]);
                 }
@@ -190,27 +194,6 @@ namespace NumericalMethods
             }               
             return norma;
         }
-
-        public static double Norma(double[,] matrix)
-        {
-            double norma = 0;
-            double max = 0;
-
-            for (int i = 0; i < matrix.Length; i++)
-            {
-                max = 0;
-                for (int j = 0; j < matrix.Length-1; j++)
-                {
-                    max += Math.Abs(matrix[i,j]);
-                }
-                if (max > norma)
-                {
-                    norma = max;
-                }
-
-            }
-            return norma;
-        } //Norma for matrix B and d
 
         public static bool Diagonally_dominant(double[][] matrix)
         {
