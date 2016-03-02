@@ -160,9 +160,6 @@ namespace NumericalMethods
                     return;
                 }
 
-                //здесь я вывожу то, что находится в matrix
-                //и столбца В там нет. Метод Гаусса-Зейделя не работает
-
                 string str = "";
                 for (int i = 0; i < matrix.Length; i++)
                 {
