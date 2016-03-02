@@ -278,8 +278,17 @@ namespace NumericalMethods
         private double Get_accuracy()
         {
             double accuracy = double.NaN;
-            if (double.TryParse(textBox_accuracy.Text.Replace(".", ","), out accuracy) && double.TryParse(textBox_accuracy.Text.Replace(",", "."), out accuracy))
-                return double.NaN;
+
+            double.TryParse(textBox_accuracy.Text, out accuracy);
+
+            if (accuracy.ToString().Length != textBox_accuracy.Text.Length)
+                double.TryParse(textBox_accuracy.Text.Replace(",", "."), out accuracy);
+
+            if (accuracy.ToString().Length != textBox_accuracy.Text.Length)
+                double.TryParse(textBox_accuracy.Text.Replace(".", ","), out accuracy);
+
+            if (accuracy.ToString().Length != textBox_accuracy.Text.Length)
+                accuracy = double.NaN;
 
             return accuracy;
         }
