@@ -11,8 +11,10 @@ namespace NumericalMethods
     {
         public static double[] Gauss_with_main_element(double[][] matrix)
         {
-            int size = matrix.Length;
+            if (Is_diagonally_dominant(matrix) == false)
+                Make_diagonally_dominant(ref matrix);
 
+            int size = matrix.Length;
             double main = 0;
             int m = 0;
             int i = 0;
@@ -100,11 +102,11 @@ namespace NumericalMethods
             {
                 B[i] = new double[size];
                 d[i] = new double[1];
-            }         
+            }
 
             if (Diagonally_dominant(matrix) == true)
             {
-                for(int i=0;i< size; i++)
+                for (int i = 0; i < size; i++)
                 {
                     for (int j = 0; j < size; j++)
                     {
@@ -122,7 +124,7 @@ namespace NumericalMethods
                 }
 
                 if (Norma(B) < 1)
-                {                  
+                {
                     maxIter = ((1 / (Math.Log10(Norma(B)))) * (Math.Log10(accuracy) - Math.Log10(Norma(d)) + Math.Log10(1 - Norma(B)))) - 1;
                 }
                 else
@@ -179,10 +181,10 @@ namespace NumericalMethods
             double norma = 0;
             double max = 0;
 
-            for(int i = 0; i < matrix.Length; i++)
+            for (int i = 0; i < matrix.Length; i++)
             {
                 max = 0;
-                for (int j = 0; j < matrix[i].Length-1; j++)
+                for (int j = 0; j < matrix[i].Length - 1; j++)
                 {
                     max += Math.Abs(matrix[i][j]);
                 }
@@ -190,8 +192,8 @@ namespace NumericalMethods
                 {
                     norma = max;
                 }
-                    
-            }               
+
+            }
             return norma;
         }
 
@@ -209,6 +211,186 @@ namespace NumericalMethods
 
                 if (Math.Abs(matrix[i][i]) < sum)
                     return false;
+            }
+
+            return true;
+        }
+
+        public static bool Is_diagonally_dominant(double[][] matrix)
+        {
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (Is_diagonally_dominant(matrix[i], i) == false)
+                    return false;
+            }
+
+            return true;
+        }
+        public static bool Is_diagonally_dominant(double[] row, int row_count)
+        {
+            if (row_count >= row.Length)
+                return false;
+
+            double total = 0;
+            for (int i = 0; i < row.Length; i++)
+            {
+                if (i != row_count)
+                    total += Math.Abs(row[i]);
+            }
+
+            if (total >= Math.Abs(row[row_count]))
+                return false;
+
+            return true;
+        }
+        public static int Diagonally_dominant_element(double[] row)
+        {
+            double total = 0;
+            for (int i = 0; i < row.Length; i++)
+                total += Math.Abs(row[i]);
+
+            for (int i = 0; i < row.Length; i++)
+            {
+                if (Math.Abs(row[i]) > total - Math.Abs(row[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+
+        public static bool Make_diagonally_dominant(ref double[][] matrix)
+        {
+            if (Is_diagonally_dominant(matrix) == true)
+                return true;
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                int now_max = Diagonally_dominant_element(matrix[i]);
+                if (now_max == -1)
+                    continue;
+
+                if (Is_diagonally_dominant(matrix[now_max], now_max) == false)
+                {
+                    Replace_row(ref matrix[now_max], ref matrix[i]);
+                    i = 0;
+                }
+            }
+
+            if (Is_diagonally_dominant(matrix) == true)
+                return true;
+
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (Is_diagonally_dominant(matrix[i], i) == true)
+                    continue;
+
+                for (int j = 0; j < matrix.Length; j++)
+                {
+                    if (i == j)
+                        continue;
+
+                    if (Make_diagonally_dominant(ref matrix[i], i, ref matrix[j]) == true)
+                        break;
+                }
+
+                if (Is_diagonally_dominant(matrix[i], i) == false)
+                    return false;
+            }
+
+            return true;
+        }
+        public static bool Make_diagonally_dominant(ref double[] row, int row_count, ref double[] side_row)
+        {
+            if (side_row.Length != row.Length)
+                return false;
+
+            if (Is_diagonally_dominant(row, row_count) == true)
+                return true;
+
+            if (side_row[row_count] == 0)
+            {
+                if (row[row_count] == 0)
+                    return false;
+                else
+                {
+                    for (int i = 0; i < row.Length; i++)
+                        side_row[i] += row[i];
+                }
+            }
+
+            for (int i = 0; i < row.Length; i++)
+            {
+                if (i == row_count)
+                    continue;
+
+                bool reserve = false;
+                if (side_row[i] * row[i] < 0)
+                    reserve = true;
+
+                double row_multiplier = side_row[i];
+                double side_row_multiplier = row[i];
+                for (int j = 0; j < row.Length; j++)
+                {
+                    row[j] *= side_row_multiplier;
+                    side_row[j] *= row_multiplier;
+
+                    row[j] += (reserve == true ? -1 : 1) * side_row[j];
+                }
+            }
+
+            return true;
+        }
+        public static void Replace_row(ref double[] to_replace, ref double[] from_replace)
+        {
+            double[] temp = new double[to_replace.Length];
+            temp = to_replace;
+            to_replace = from_replace;
+            from_replace = temp;
+        }
+
+        public static bool Make_matrix_whichout_zero(ref double[][] matrix)
+        {
+            bool[] matrix_element = new bool[matrix.Length];
+            for (int i = 0; i < matrix.Length; i++)
+                matrix_element[i] = false;
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix.Length; j++)
+                {
+                    if (matrix[i][j] != 0)
+                        matrix_element[j] = true;
+                }
+            }
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                if (matrix_element[i] == false)
+                    return false;
+            }
+            
+            for (int i = 0; i < matrix.Length; i++)
+            {
+                for (int j = 0; j < matrix.Length; j++)
+                {
+                    if (matrix[i][j] == 0)
+                    {
+                        for (int k = 0; k < matrix.Length; k++)
+                        {
+                            if (k == i)
+                                continue;
+
+                            if (matrix[k][j] != 0)
+                            {
+                                for (int kj = 0; kj < matrix.Length; kj++)
+                                    matrix[i][kj] += matrix[k][kj];
+
+                                break;
+                            }
+                        }
+
+                        i = 0;
+                        break;
+                    }
+                }
             }
 
             return true;
