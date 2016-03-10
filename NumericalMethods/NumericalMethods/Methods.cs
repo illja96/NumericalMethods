@@ -88,6 +88,26 @@ namespace NumericalMethods
             return roots;
         }
 
+        public static double[] Verify_Gauss_with_main_element(double[][] matrix, double[] roots)
+        {
+            double[] right_side = new double[matrix.Length];
+
+            double sum = 0;
+
+            for(int i = 0; i < matrix.Length; i++)
+            {
+                sum = 0;
+                for (int j = 0; j < matrix.Length; j++)
+                {
+                    sum += matrix[i][j] * roots[j];
+                }
+
+                right_side[i] = sum;
+            }
+
+            return right_side;
+        }
+
         public static double[] Gauss_seidel(double[][] matrix, double accuracy)
         {
             int size = matrix.Length;
@@ -102,7 +122,7 @@ namespace NumericalMethods
             {
                 B[i] = new double[size];
                 d[i] = new double[1];
-            }
+            }         
 
             if (Diagonally_dominant(matrix) == true)
             {
@@ -123,8 +143,8 @@ namespace NumericalMethods
                     d[i][0] = matrix[i][size] / matrix[i][i];
                 }
 
-                if (Norma(B) < 1)
-                {
+                if (Norma(B) > 1)
+                {                  
                     maxIter = ((1 / (Math.Log10(Norma(B)))) * (Math.Log10(accuracy) - Math.Log10(Norma(d)) + Math.Log10(1 - Norma(B)))) - 1;
                 }
                 else
@@ -143,29 +163,6 @@ namespace NumericalMethods
 
                 //algorithm
 
-                int k = 0;
-                double diff = 0;
-                double s = 0;
-                double Xi = 0;
-
-                while ((k <= maxIter) && (diff >= accuracy))
-                {
-                    k = k + 1;
-                    for (int i = 0; i < size; i++)
-                    {
-                        s = 0;
-                        for (int j = 0; j < size; j++)
-                        {
-                            if (i != j)
-                            {
-                                s += matrix[i][j] * next_solves[j];
-                            }
-                        }
-                        Xi = (prev_solves[i] - s) / matrix[i][i];
-                        diff = Math.Abs(Xi - next_solves[i]);
-                        next_solves[i] = Xi;
-                    }
-                }
 
                 return next_solves;
 
@@ -192,8 +189,8 @@ namespace NumericalMethods
                 {
                     norma = max;
                 }
-
-            }
+                    
+            }               
             return norma;
         }
 

@@ -71,8 +71,6 @@ namespace NumericalMethods
                         matrix_values[i][j] = matrix[i][j];
                 }
                 dataGrid_matrix.Items.Refresh();
-
-                file_reader.Close();
             }
             catch (Exception ex)
             {
@@ -149,11 +147,15 @@ namespace NumericalMethods
             }
 
             double[] roots = null;
+
+            double[] right_side = null;
             double[][] matrix = Get_matrix_from_dataGrid();
+            double[][] second = Get_matrix_from_dataGrid();
 
             if (MenuItem_gauss_with_main_element.IsChecked == true)
             {
                 roots = Methods.Gauss_with_main_element(matrix);
+                right_side = Methods.Verify_Gauss_with_main_element(second, roots);
             }
 
             if (MenuItem_gauss_seidel.IsChecked == true)
@@ -186,7 +188,7 @@ namespace NumericalMethods
                 roots = Methods.Gauss_seidel(Get_matrix_from_dataGrid(), accuracy);
             }
 
-            Show_roots(roots);
+            Show_roots(roots, right_side);
 
         }
 
@@ -296,7 +298,7 @@ namespace NumericalMethods
             return accuracy;
         }
 
-        private void Show_roots(double[] roots)
+        private void Show_roots(double[] roots, double[] right_side)
         {
             if (roots == null || roots.Length == 0)
             {
@@ -309,7 +311,10 @@ namespace NumericalMethods
             for (int i = 0; i < roots.Length; i++)
                 message += "X" + (i + 1) + " = " + roots[i] + (i == roots.Length - 1 ? "" : "\n");
 
-            MessageBox.Show(message, "Корни", MessageBoxButton.OK, MessageBoxImage.Information);
+            for (int i = 0; i < right_side.Length; i++)
+                message += "Right_side" + (i + 1) + " = " + right_side[i] + (i == right_side.Length - 1 ? "" : "\n");
+
+            MessageBox.Show(message, "Корни и проверка", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
