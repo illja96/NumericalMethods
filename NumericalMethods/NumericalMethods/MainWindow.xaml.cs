@@ -24,9 +24,6 @@ namespace NumericalMethods
             matrix_values = new List<double[]>();
             open_file = new OpenFileDialog();
             save_file = new SaveFileDialog();
-
-            UI ui = new UI();
-            ui.Show();
         }
 
         OpenFileDialog open_file;

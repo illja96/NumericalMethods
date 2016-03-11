@@ -9,6 +9,79 @@ namespace NumericalMethods
 {
     public abstract class Methods
     {
+        public abstract class Lab1
+        {
+            public static double[] Gauss_main(double[][] x, double[] b)
+            {
+                return null;
+            }
+
+            public static double[] Gauss_seidel(double[][] x, double[] b, double eps)
+            {
+                double[] current_solution = new double[x.Length];
+                double[] previous_solution = new double[x.Length];
+
+                do
+                {
+                    for (int i = 0; i < x.Length; i++)
+                        previous_solution[i] = current_solution[i];
+
+                    for (int i = 0; i < x.Length; i++)
+                    {
+                        double var = 0;
+
+                        for (int j = 0; j < i; j++)
+                            var += (x[i][j] * current_solution[j]);
+
+                        for (int j = i + 1; j < x.Length; j++)
+                            var += (x[i][j] * previous_solution[j]);
+
+                        current_solution[i] = (b[i] - var) / x[i][i];
+                    }
+                }
+                while (!Gauss_seidel_condition(current_solution, previous_solution, eps));
+
+                return current_solution;
+            }
+            private static bool Gauss_seidel_condition(double[] current_solution, double[] previous_solution, double eps)
+            {
+                double norm = 0;
+                for (int i = 0; i < current_solution.Length; i++)
+                    norm += (current_solution[i] - previous_solution[i]) * (current_solution[i] - previous_solution[i]);
+
+                if (Math.Sqrt(norm) >= eps)
+                    return false;
+
+                return true;
+            }
+        }
+
+        public abstract class Lab2
+        {
+            public static double Chords(Func<double, double> function, double a, double b, double eps)
+            {
+                while (Math.Abs(b - a) > eps)
+                {
+                    a = b - (b - a) * function(b) / (function(b) - function(a));
+                    b = a + (a - b) * function(a) / (function(a) - function(b));
+                }
+
+                return b;
+            }
+
+            public static double Newton(Func<double, double> function, Func<double, double> d_function, double x0, double eps)
+            {
+                double x1 = x0 - function(x0) / d_function(x0);
+                while (Math.Abs(x0 - x1) > eps)
+                {
+                    x0 = x1;
+                    x1 = x1 - function(x1) / d_function(x1);
+                }
+
+                return x1;
+            }
+        }
+
         public static double[] Gauss_with_main_element(double[][] matrix)
         {
             if (Is_diagonally_dominant(matrix) == false)
@@ -94,7 +167,7 @@ namespace NumericalMethods
 
             double sum = 0;
 
-            for(int i = 0; i < matrix.Length; i++)
+            for (int i = 0; i < matrix.Length; i++)
             {
                 sum = 0;
                 for (int j = 0; j < matrix.Length; j++)
@@ -122,7 +195,7 @@ namespace NumericalMethods
             {
                 B[i] = new double[size];
                 d[i] = new double[1];
-            }         
+            }
 
             if (Diagonally_dominant(matrix) == true)
             {
@@ -144,7 +217,7 @@ namespace NumericalMethods
                 }
 
                 if (Norma(B) > 1)
-                {                  
+                {
                     maxIter = ((1 / (Math.Log10(Norma(B)))) * (Math.Log10(accuracy) - Math.Log10(Norma(d)) + Math.Log10(1 - Norma(B)))) - 1;
                 }
                 else
@@ -189,8 +262,8 @@ namespace NumericalMethods
                 {
                     norma = max;
                 }
-                    
-            }               
+
+            }
             return norma;
         }
 
@@ -363,7 +436,7 @@ namespace NumericalMethods
                 if (matrix_element[i] == false)
                     return false;
             }
-            
+
             for (int i = 0; i < matrix.Length; i++)
             {
                 for (int j = 0; j < matrix.Length; j++)
