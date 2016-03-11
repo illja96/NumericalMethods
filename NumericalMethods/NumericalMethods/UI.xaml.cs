@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using System.ComponentModel;
+using System.Xml.Serialization;
 
 namespace NumericalMethods
 {
@@ -20,12 +23,12 @@ namespace NumericalMethods
     /// </summary>
     public partial class UI : Window
     {
-        private OpenFileDialog open_file;
-        private SaveFileDialog save_file;
-        private List<double[]> lab1_matrix;
+        public OpenFileDialog open_file;
+        public SaveFileDialog save_file;
+        public List<double[]> lab1_matrix;
 
-        private Dictionary<string, Func<double, double>> lab2_functions;
-        private Dictionary<string, Func<double, double>> lab2_d_functions;
+        public Dictionary<string, Func<double, double>> lab2_functions;
+        public Dictionary<string, Func<double, double>> lab2_d_functions;
 
         public UI()
         {
@@ -49,6 +52,81 @@ namespace NumericalMethods
 
             comboBox_lab2_function.ItemsSource = lab2_functions.Keys.ToArray();
             comboBox_lab2_function.SelectedIndex = 0;
+        }
+
+        private void MenuItem_open_file_Click(object sender, RoutedEventArgs e)
+        {
+            open_file.FileOk += open_file_FileOk;
+            open_file.InitialDirectory = Directory.GetCurrentDirectory();
+            open_file.Multiselect = false;
+            open_file.Filter = "XML Files | *.xml";
+            open_file.FileName = "settings";
+            open_file.ShowDialog();
+        }
+        private void open_file_FileOk(object sender, CancelEventArgs e)
+        {
+            XML_settings settings;
+            try
+            {
+                using (FileStream fs = new FileStream(open_file.FileName, FileMode.Open))
+                {
+                    XmlSerializer settings_xml = new XmlSerializer(typeof(XML_settings));
+                    settings = (XML_settings)settings_xml.Deserialize(fs);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Невозможно прочитать файл!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            dataGrid_lab1_matrix_generate(settings.lab1_matrix.Length);
+            lab1_matrix = settings.lab1_matrix.ToList();
+            dataGrid_lab1_matrix.ItemsSource = lab1_matrix;
+            while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count)
+                dataGrid_lab1_matrix.Columns.RemoveAt(lab1_matrix.Count + 1);
+            dataGrid_lab1_matrix.Items.Refresh();
+
+            textBox_lab1_matrix_size.Text = settings.lab1_matrix_size;
+
+            textBox_lab1_gauss_seidel_accuracy.Text = settings.lab1_gauss_seidel_accuracy;
+
+            if (lab2_functions.ContainsKey(settings.lab2_function))
+                comboBox_lab2_function.SelectedItem = settings.lab2_function.ToString();
+
+            textBox_lab2_chords_start_interval.Text = settings.lab2_chords_start_interval;
+            textBox_lab2_chords_end_interval.Text = settings.lab2_chords_end_interval;
+            textBox_lab2_chords_accuracy.Text = settings.lab2_chords_accuracy;
+
+            textBox_lab2_newton_initial_approximation.Text = settings.lab2_newton_initial_approximation;
+            textBox_lab2_newton_accuracy.Text = settings.lab2_newton_accuracy;
+        }
+
+        private void MenuItem_save_file_Click(object sender, RoutedEventArgs e)
+        {
+            save_file.FileOk += save_file_FileOk;
+            save_file.InitialDirectory = Directory.GetCurrentDirectory();
+            save_file.Filter = "XML File | *.xml";
+            save_file.FileName = "settings";
+            save_file.ShowDialog();
+        }
+        private void save_file_FileOk(object sender, CancelEventArgs e)
+        {
+            try
+            {
+                using (FileStream fs = new FileStream(save_file.FileName, FileMode.Create))
+                {
+                    XmlSerializer settings_xml = new XmlSerializer(typeof(XML_settings));
+                    XML_settings settings = new XML_settings(this);
+
+                    settings_xml.Serialize(fs, settings);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Невозможно записать в файл!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
         private void show_roots(double root)

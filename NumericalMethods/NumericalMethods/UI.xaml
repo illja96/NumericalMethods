@@ -9,8 +9,8 @@
     <Grid>
         <Menu Name="menu" Height="18" VerticalAlignment="Top">
             <MenuItem Name="MenuItem_file" Header="Файл">
-                <MenuItem Header="Открыть файл" Name="MenuItem_open_file"/>
-                <MenuItem Header="Сохранить в файл" Name="MenuItem_save_file"/>
+                <MenuItem Header="Открыть файл" Name="MenuItem_open_file" Click="MenuItem_open_file_Click"/>
+                <MenuItem Header="Сохранить в файл" Name="MenuItem_save_file" Click="MenuItem_save_file_Click"/>
             </MenuItem>
         </Menu>
 
@@ -70,8 +70,9 @@
                         </TabItem>
                     </TabControl>
 
-                    <Label Name="label_lab2_function" Content="Вид функции:" HorizontalAlignment="Left" Margin="305,0,0,0" VerticalAlignment="Bottom"/>
                     <Button Name="button_lab2_calculate" Content="Вычислить корни" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300" Height="25" Click="button_lab2_calculate_Click"/>
+
+                    <Label Name="label_lab2_function" Content="Вид функции:" HorizontalAlignment="Left" Margin="305,0,0,0" VerticalAlignment="Bottom"/>
                     <ComboBox Name="comboBox_lab2_function" Margin="394,0,0,3" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
