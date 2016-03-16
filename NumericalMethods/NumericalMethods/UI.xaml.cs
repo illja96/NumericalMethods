@@ -83,7 +83,7 @@ namespace NumericalMethods
             dataGrid_lab1_matrix_generate(settings.lab1_matrix.Length);
             lab1_matrix = settings.lab1_matrix.ToList();
             dataGrid_lab1_matrix.ItemsSource = lab1_matrix;
-            while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count)
+            while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count + 1)
                 dataGrid_lab1_matrix.Columns.RemoveAt(lab1_matrix.Count + 1);
             dataGrid_lab1_matrix.Items.Refresh();
 
