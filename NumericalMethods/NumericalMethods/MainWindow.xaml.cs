@@ -177,11 +177,6 @@ namespace NumericalMethods
 
                 MessageBox.Show(str+ "Norma="+Methods.Norma(matrix).ToString(), matrix.Length.ToString());
 
-                if (Methods.Diagonally_dominant(matrix) == true)
-                    MessageBox.Show("Матрица имеет диагональное преобладание.");
-                else
-                    MessageBox.Show("Матрица не имеет диагонального преобладания.");
-
                 roots = Methods.Gauss_seidel(Get_matrix_from_dataGrid(), accuracy);
             }
 

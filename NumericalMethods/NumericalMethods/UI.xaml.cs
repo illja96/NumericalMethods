@@ -153,16 +153,20 @@ namespace NumericalMethods
                 return;
             }
 
-            double[][] x = dataGrid_lab1_matrix_get_x();
-            double[] b = dataGrid_lab1_matrix_get_b();
-
             double[] roots = null;
 
             if (TabItem_lab1_gauss_main.IsSelected == true)
-                roots = Methods.Lab1.Gauss_main(x, b);
+            {
+                double[][] matrix = dataGrid_lab1_matrix_get_all();
+
+                roots = Methods.Lab1.Gauss_main(matrix);
+            }
             else
             {
+                double[][] x = dataGrid_lab1_matrix_get_x();
+                double[] b = dataGrid_lab1_matrix_get_b();
                 double accuracy;
+
                 try
                 {
                     accuracy = double.Parse(textBox_lab1_gauss_seidel_accuracy.Text);
@@ -275,6 +279,21 @@ namespace NumericalMethods
                 b[i] = lab1_matrix[i][b.Length];
 
             return b;
+        }
+        private double[][] dataGrid_lab1_matrix_get_all()
+        {
+            if (lab1_matrix == null || lab1_matrix.Count == 0)
+                return null;
+
+            double[][] x = new double[lab1_matrix.Count][];
+            for (int i = 0; i < x.Length; i++)
+            {
+                x[i] = new double[x.Length + 1];
+                for (int j = 0; j < x.Length + 1; j++)
+                    x[i][j] = lab1_matrix[i][j];
+            }
+
+            return x;
         }
 
         private void button_lab2_calculate_Click(object sender, RoutedEventArgs e)
