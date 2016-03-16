@@ -72,6 +72,8 @@ namespace NumericalMethods
                 {
                     XmlSerializer settings_xml = new XmlSerializer(typeof(XML_settings));
                     settings = (XML_settings)settings_xml.Deserialize(fs);
+
+                    fs.Close();
                 }
             }
             catch (Exception ex)
@@ -120,6 +122,8 @@ namespace NumericalMethods
                     XML_settings settings = new XML_settings(this);
 
                     settings_xml.Serialize(fs, settings);
+
+                    fs.Close();
                 }
             }
             catch (Exception ex)

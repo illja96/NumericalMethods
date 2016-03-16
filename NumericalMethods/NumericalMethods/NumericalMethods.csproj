@@ -113,6 +113,13 @@
     <Resource Include="examples\1.28.txt" />
     <Resource Include="examples\1.29.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="examples\1.26.xml" />
+    <Resource Include="examples\1.27.xml" />
+    <Resource Include="examples\1.28.xml" />
+    <Resource Include="examples\1.29.xml" />
+    <Resource Include="examples\1.30.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -13,9 +13,6 @@ namespace NumericalMethods
         {
             public static double[] Gauss_main(double[][] matrix)
             {
-                if (Gauss_with_is_diagonally_dominant(matrix) == false)
-                    return null;
-
                 int size = matrix.Length;
                 double main = 0;
                 int m = 0;
@@ -88,24 +85,6 @@ namespace NumericalMethods
                 }
 
                 return roots;
-            }
-            public static bool Gauss_with_is_diagonally_dominant(double[][] matrix)
-            {
-                double sum = 0;
-                for (int i = 0; i < matrix.Length; i++)
-                {
-                    sum = 0;
-                    for (int j = 0; j < matrix.Length; j++)
-                    {
-                        if (i != j)
-                            sum += Math.Abs(matrix[i][j]);
-                    }
-
-                    if (Math.Abs(matrix[i][i]) < sum)
-                        return false;
-                }
-
-                return true;
             }
 
             public static double[] Gauss_seidel(double[][] x, double[] b, double eps)
