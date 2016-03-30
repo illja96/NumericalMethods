@@ -76,7 +76,7 @@ namespace NumericalMethods
                     fs.Close();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Невозможно прочитать файл!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -126,7 +126,7 @@ namespace NumericalMethods
                     fs.Close();
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Невозможно записать в файл!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -175,7 +175,7 @@ namespace NumericalMethods
                 {
                     accuracy = double.Parse(textBox_lab1_gauss_seidel_accuracy.Text);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -184,7 +184,7 @@ namespace NumericalMethods
                 roots = Methods.Lab1.Gauss_seidel(x, b, accuracy);
             }
 
-            if (roots == null || roots.Length == 0)
+            if (roots == null || roots.Length == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
             {
                 MessageBox.Show("Невозможно получить корни!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -202,7 +202,7 @@ namespace NumericalMethods
                 int size = int.Parse(textBox_lab1_matrix_size.Text);
                 dataGrid_lab1_matrix_generate(size);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Некорректно задан размер генерируемой матрицы!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -311,7 +311,7 @@ namespace NumericalMethods
                 {
                     start_interval = double.Parse(textBox_lab2_chords_start_interval.Text);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Некорректно задано начало отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -321,7 +321,7 @@ namespace NumericalMethods
                 {
                     end_interval = double.Parse(textBox_lab2_chords_end_interval.Text);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Некорректно задан конец отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -331,7 +331,7 @@ namespace NumericalMethods
                 {
                     accuracy = double.Parse(textBox_lab2_newton_accuracy.Text);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -348,7 +348,7 @@ namespace NumericalMethods
                 {
                     initial_approximation = double.Parse(textBox_lab2_newton_initial_approximation.Text);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Некорректно задано начальное приближение!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
@@ -358,7 +358,7 @@ namespace NumericalMethods
                 {
                     accuracy = double.Parse(textBox_lab2_newton_accuracy.Text);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;

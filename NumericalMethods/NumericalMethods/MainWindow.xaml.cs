@@ -69,7 +69,7 @@ namespace NumericalMethods
                 }
                 dataGrid_matrix.Items.Refresh();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Невозможно открыть файл!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -111,7 +111,7 @@ namespace NumericalMethods
                 }
                 file_writer.Close();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show("Невозможно сохранить файл!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
