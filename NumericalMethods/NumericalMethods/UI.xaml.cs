@@ -146,6 +146,29 @@ namespace NumericalMethods
             for (int i = 0; i < roots.Length; i++)
                 message += string.Format("x{0} = {1}", i + 1, roots[i]) + (i != roots.Length - 1 ? "\n" : "");
 
+            message += "\n\n" + "Корни в уравнении:" + "\n";
+
+            double[][] matrix = dataGrid_lab1_matrix_get_all();
+
+            for (int i = 0; i < roots.Length; i++)
+            {
+                double row_sum = 0;
+
+                for (int j = 0; j < roots.Length; j++)
+                {
+                    message += string.Format("{0} * {1}", matrix[i][j], roots[j]);
+                    row_sum += matrix[i][j] * roots[j];
+
+                    if (j == roots.Length - 1)
+                    {
+                        message += string.Format(" = {0} ~~ {1}", row_sum, matrix[i][j + 1]);
+                        message += "\n";
+                    }
+                    else
+                        message += " + ";
+                }                
+            }
+
             MessageBox.Show(message, "Корни", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
