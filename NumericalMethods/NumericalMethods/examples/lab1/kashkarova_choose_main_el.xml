@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<XML_settings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <lab1_matrix>
+    <ArrayOfDouble>
+      <double>0.1</double>
+      <double>12</double>
+      <double>-0.13</double>
+      <double>0.1</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>0.12</double>
+      <double>0.71</double>
+      <double>0.12</double>
+      <double>0.26</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>-0.13</double>
+      <double>0.15</double>
+      <double>0.63</double>
+      <double>0.38</double>
+    </ArrayOfDouble>
+  </lab1_matrix>
+  <lab1_matrix_size>3</lab1_matrix_size>
+  <lab1_gauss_seidel_accuracy>0.001</lab1_gauss_seidel_accuracy>
+  <lab2_function> 4: x^3 - x^2 + 3 = 0</lab2_function>
+  <lab2_chords_start_interval>-2</lab2_chords_start_interval>
+  <lab2_chords_end_interval>2</lab2_chords_end_interval>
+  <lab2_chords_accuracy>0.001</lab2_chords_accuracy>
+  <lab2_newton_initial_approximation>-2</lab2_newton_initial_approximation>
+  <lab2_newton_accuracy>0.001</lab2_newton_accuracy>
+</XML_settings>

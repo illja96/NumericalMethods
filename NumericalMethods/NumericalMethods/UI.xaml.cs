@@ -149,6 +149,7 @@ namespace NumericalMethods
             message += "\n\n" + "Корни в уравнении:" + "\n";
 
             double[][] matrix = dataGrid_lab1_matrix_get_all();
+            int d = max_accuracy_by_matrix(lab1_matrix.ToArray());
 
             for (int i = 0; i < roots.Length; i++)
             {
@@ -161,15 +162,43 @@ namespace NumericalMethods
 
                     if (j == roots.Length - 1)
                     {
-                        message += string.Format(" = {0} ~~ {1}", row_sum, matrix[i][j + 1]);
+                        message += string.Format(" = {0} ~~ {1}", Math.Round(row_sum, d), matrix[i][j + 1]);
                         message += "\n";
                     }
                     else
                         message += " + ";
-                }                
+                }
             }
 
             MessageBox.Show(message, "Корни", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private int max_accuracy_by_matrix(double[][] matrix)
+        {
+            if (matrix == null || matrix.Count() == 0 || matrix.LongCount() == 0)
+                return -1;
+
+            int max = -1;
+
+            for (int i = 0; i < matrix.Count(); i++)
+            {
+                for (int j = 0; j < matrix[i].Count(); j++)
+                {
+                    int count = -1;
+
+                    if (matrix[i][j].ToString().Contains('.') == true)
+                    {
+                        int index = matrix[i][j].ToString().IndexOf('.');
+                        count = matrix[i][j].ToString().Skip(index + 1).Count();
+                    }
+                    else
+                        count = 1;
+
+                    if (max < count)
+                        max = count;
+                }
+            }
+
+            return max;
         }
 
         private void button_lab1_calculate_Click(object sender, RoutedEventArgs e)
@@ -194,6 +223,22 @@ namespace NumericalMethods
                 double[] b = dataGrid_lab1_matrix_get_b();
                 double accuracy;
 
+                if (Methods.Is_diagonaly_dominant(x) == false)
+                {
+                    /*
+                    if (MessageBox.Show("Введенная матрица не обладает свойством диагонального преобладания!\nПреобразовать матрицу?", "Ошибка", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                    {
+                        x = Methods.Make_diagonaly_dominant(x);
+
+                        if (x == null || Methods.Is_diagonaly_dominant(x) == false)
+                        {
+                            MessageBox.Show("Невозможно получить корни!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                        }
+                    }
+                    */
+                }
+
                 try
                 {
                     accuracy = double.Parse(textBox_lab1_gauss_seidel_accuracy.Text);
@@ -205,6 +250,14 @@ namespace NumericalMethods
                 }
 
                 roots = Methods.Lab1.Gauss_seidel(x, b, accuracy);
+
+                /*
+                if (roots == null || roots.Length == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
+                {
+                    dataGrid_lab1_matrix_set_all(x, b);
+                    dataGrid_lab1_matrix.Items.Refresh();
+                }
+                */
             }
 
             if (roots == null || roots.Length == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
@@ -321,6 +374,30 @@ namespace NumericalMethods
             }
 
             return x;
+        }
+        private void dataGrid_lab1_matrix_set_all(double[][] x, double[] b)
+        {
+            dataGrid_lab1_matrix_generate(x.Count());
+
+            double[][] matrix = new double[x.Count()][];
+            for (int i = 0; i < matrix.Count(); i++)
+            {
+                matrix[i] = new double[matrix.Count() + 1];
+
+                for (int j = 0; j < matrix[i].Count(); j++)
+                {
+                    if (j == matrix[i].Count() - 1)
+                        matrix[i][j] = b[i];
+                    else
+                        matrix[i][j] = x[i][j];
+                }
+            }
+
+            lab1_matrix = matrix.ToList();
+            dataGrid_lab1_matrix.ItemsSource = lab1_matrix;
+            while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count + 1)
+                dataGrid_lab1_matrix.Columns.RemoveAt(lab1_matrix.Count + 1);
+            dataGrid_lab1_matrix.Items.Refresh();
         }
 
         private void button_lab2_calculate_Click(object sender, RoutedEventArgs e)

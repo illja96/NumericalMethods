@@ -152,5 +152,135 @@ namespace NumericalMethods
                 return x1;
             }
         }
+
+        public static double[][] Make_diagonaly_dominant(double[][] matrix)
+        {
+            if (Is_diagonaly_dominant(matrix) == true)
+                return matrix;
+
+            for (int i = 0; i < matrix.Count(); i++)
+            {
+                int diagonaly_dominant_element = Diagonaly_dominant_element(matrix[i]);
+
+                if (diagonaly_dominant_element == -1 || diagonaly_dominant_element == i)
+                    continue;
+                else
+                {
+                    if (Is_diagonaly_dominant(matrix[diagonaly_dominant_element], diagonaly_dominant_element) == true)
+                        continue;
+                    else
+                    {
+                        Swap_rows(ref matrix[diagonaly_dominant_element], ref matrix[i]);
+
+                        i = -1;
+                    }
+                }
+            }
+
+            if (Is_diagonaly_dominant(matrix) == true)
+                return matrix;
+
+            for (int i = 0; i < matrix.Count(); i++)
+            {
+                if (Is_diagonaly_dominant(matrix[i], i) == false)
+                {
+                    if (i != matrix.Count() - 1)
+                        Make_diagonaly_dominant(ref matrix[i], matrix[i + 1], i);
+                    else
+                        Make_diagonaly_dominant(ref matrix[i], matrix[i - 1], i);
+                }
+            }
+
+            if (Is_diagonaly_dominant(matrix) == false)
+                return null;
+
+            return matrix;
+        }
+        public static bool Is_diagonaly_dominant(double[][] matrix)
+        {
+            if (matrix == null || matrix.Count() == 0 || matrix.LongCount() == 0)
+                return false;
+
+            for (int i = 0; i < matrix.Count(); i++)
+            {
+                if (Is_diagonaly_dominant(matrix[i], i) == false)
+                    return false;
+            }
+
+            return true;
+        }
+        private static bool Is_diagonaly_dominant(double[] row, int count)
+        {
+            if (row.Count() <= count)
+                return false;
+
+            double sum = 0;
+            foreach (var e in row)
+                sum += Math.Abs(e);
+
+            if (Math.Abs(row[count]) >= sum - Math.Abs(row[count]))
+                return true;
+            else
+                return false;
+        }
+        private static int Diagonaly_dominant_element(double[] row)
+        {
+            if (row == null || row.Count() == 0)
+                return -1;
+
+            double sum = 0;
+            foreach (var e in row)
+                sum += Math.Abs(e);
+
+            for (int i = 0; i < row.Count(); i++)
+            {
+                if (Math.Abs(row[i]) >= sum - Math.Abs(row[i]))
+                    return i;
+            }
+
+            return -1;
+        }
+        private static void Swap_rows(ref double[] row_1, ref double[] row_2)
+        {
+            if (row_1 == null || row_2 == null || row_1.Count() == 0 || row_2.Count() == 0 || row_1.Count() != row_2.Count())
+                return;
+
+            double[] row_temp = new double[row_1.Count()];
+
+            for (int i = 0; i < row_1.Count(); i++)
+            {
+                row_temp[i] = row_1[i];
+                row_1[i] = row_2[i];
+                row_2[i] = row_temp[i];
+            }
+        }
+        private static void Make_diagonaly_dominant(ref double[] row_to_make, double[] row_from_make, int diagonaly_element)
+        {
+            if (row_to_make == null || row_from_make == null || row_to_make.Count() == 0 || row_from_make.Count() == 0 || row_to_make.Count() != row_from_make.Count())
+                return;
+
+            for (int i = 0; i < row_to_make.Count(); i++)
+            {
+                if (i == diagonaly_element)
+                    continue;
+
+                double row_to_make_multipler = row_from_make[i];
+                double row_from_make_multipler = row_to_make[i];
+
+                bool is_minus;
+                if ((row_to_make[i] * row_to_make_multipler) - (row_from_make[i] * row_from_make_multipler) == 0)
+                    is_minus = true;
+                else
+                    is_minus = false;
+
+                for (int j = 0; j < row_to_make.Count(); j++)
+                {
+                    if (is_minus == true)
+                        row_to_make[j] = (row_to_make[j] * row_to_make_multipler) - (row_from_make[j] * row_from_make_multipler);
+                    else
+                        row_to_make[j] = (row_to_make[j] * row_to_make_multipler) + (row_from_make[j] * row_from_make_multipler);
+                }
+            }
+        }
     }
 }
