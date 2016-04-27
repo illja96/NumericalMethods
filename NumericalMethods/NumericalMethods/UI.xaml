@@ -76,6 +76,12 @@
                     <ComboBox Name="comboBox_lab2_function" Margin="394,0,0,3" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
+
+            <TabItem Name="TabItem_lab3" Header="Лабораторная работа №3"></TabItem>
+
+            <TabItem Name="TabItem_lab4" Header="Лабораторная работа №4"></TabItem>
+
+            <TabItem Name="TabItem_lab5" Header="Лабораторная работа №5"></TabItem>
         </TabControl>
     </Grid>
 </Window>
