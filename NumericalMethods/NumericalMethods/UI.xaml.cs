@@ -135,38 +135,54 @@ namespace NumericalMethods
 
         private void show_roots(double root)
         {
-            string message = "Вычисленные корни:" + "\n";
-            message += string.Format("x = {0}", root);
+            string message = "";
+
+            if (double.IsNaN(root) == true)
+                message = "Корень отсутствует";
+            else
+            {
+                message = "Вычисленные корни:" + "\n";
+                message += string.Format("x = {0}", root);
+            }            
 
             MessageBox.Show(message, "Корни", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void show_roots(double[] roots)
         {
-            string message = "Вычисленные корни:" + "\n";
-            for (int i = 0; i < roots.Length; i++)
-                message += string.Format("x{0} = {1}", i + 1, roots[i]) + (i != roots.Length - 1 ? "\n" : "");
+            string message = "";
 
-            message += "\n\n" + "Корни в уравнении:" + "\n";
-
-            double[][] matrix = dataGrid_lab1_matrix_get_all();
-            int d = max_accuracy_by_matrix(lab1_matrix.ToArray());
-
-            for (int i = 0; i < roots.Length; i++)
+            if (roots == null || roots.Length == 0)
             {
-                double row_sum = 0;
+                message = "Корни отсутствуют";
+            }
+            else
+            {
+                message = "Вычисленные корни:" + "\n";
+                for (int i = 0; i < roots.Length; i++)
+                    message += string.Format("x{0} = {1}", i + 1, roots[i]) + (i != roots.Length - 1 ? "\n" : "");
 
-                for (int j = 0; j < roots.Length; j++)
+                message += "\n\n" + "Корни в уравнении:" + "\n";
+
+                double[][] matrix = dataGrid_lab1_matrix_get_all();
+                int d = max_accuracy_by_matrix(lab1_matrix.ToArray());
+
+                for (int i = 0; i < roots.Length; i++)
                 {
-                    message += string.Format("{0} * {1}", matrix[i][j], roots[j]);
-                    row_sum += matrix[i][j] * roots[j];
+                    double row_sum = 0;
 
-                    if (j == roots.Length - 1)
+                    for (int j = 0; j < roots.Length; j++)
                     {
-                        message += string.Format(" = {0} ~~ {1}", Math.Round(row_sum, d), matrix[i][j + 1]);
-                        message += "\n";
+                        message += string.Format("{0} * {1}", matrix[i][j], roots[j]);
+                        row_sum += matrix[i][j] * roots[j];
+
+                        if (j == roots.Length - 1)
+                        {
+                            message += string.Format(" = {0} ~~ {1}", Math.Round(row_sum, d), matrix[i][j + 1]);
+                            message += "\n";
+                        }
+                        else
+                            message += " + ";
                     }
-                    else
-                        message += " + ";
                 }
             }
 

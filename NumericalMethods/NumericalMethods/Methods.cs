@@ -131,6 +131,9 @@ namespace NumericalMethods
         {
             public static double Chords(Func<double, double> function, double a, double b, double eps)
             {
+                if (function(a) * function(b) > 0)
+                    return double.NaN;
+
                 while (Math.Abs(b - a) > eps)
                 {
                     a = b - (b - a) * function(b) / (function(b) - function(a));
