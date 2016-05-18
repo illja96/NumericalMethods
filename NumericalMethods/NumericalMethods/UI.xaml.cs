@@ -239,20 +239,10 @@ namespace NumericalMethods
                 double[] b = dataGrid_lab1_matrix_get_b();
                 double accuracy;
 
-                if (Methods.Is_diagonaly_dominant(x) == false)
+                if (Methods.Lab1.Is_diagonaly_dominant(x) == false)
                 {
-                    /*
-                    if (MessageBox.Show("Введенная матрица не обладает свойством диагонального преобладания!\nПреобразовать матрицу?", "Ошибка", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
-                    {
-                        x = Methods.Make_diagonaly_dominant(x);
-
-                        if (x == null || Methods.Is_diagonaly_dominant(x) == false)
-                        {
-                            MessageBox.Show("Невозможно получить корни!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                            return;
-                        }
-                    }
-                    */
+                    MessageBox.Show("Введенная матрица не обладает свойством диагонального преобладания!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
 
                 try
