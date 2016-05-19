@@ -220,6 +220,79 @@ namespace NumericalMethods
 
                 return polynom;
             }
+
+            public static double Newton_polynom(List<double> x_list, List<double> y_list, double x)
+            {
+                if (x_list == null || y_list == null || x_list.Count == 0 || y_list.Count == 0 || x_list.Count != y_list.Count || double.IsNaN(x) == true)
+                    return double.NaN;
+
+                double[][] f = new double[x_list.Count - 1][];
+                for (int i = 0; i < f.Count(); i++)
+                    f[i] = new double[f.Count() - i];
+
+                for (int j = 0; j < f.Count(); j++)
+                {
+                    for (int i = 0; i < f.Count() - j; i++)
+                    {
+                        if (j == 0)
+                            f[j][i] = (y_list[i + 1] - y_list[i]) / (x_list[i + 1] - x_list[i]);
+                        else
+                            f[j][i] = (f[j - 1][i + 1] - f[j - 1][i]) / (x_list[i + 1 + j] - x_list[i]);
+                    }
+                }
+
+                List<double> L = new List<double>();
+                L.Add(y_list[0]);
+
+                for (int i = 0; i < f.Count(); i++)
+                {
+                    double Li = f[i][0];
+
+                    for (int j = i; j >= 0; j--)
+                        Li *= (x - x_list[j]);
+
+                    L.Add(Li);
+                }
+
+                return L.Sum();
+            }
+            public static string Newton_polynom(List<double> x_list, List<double> y_list)
+            {
+                if (x_list == null || y_list == null || x_list.Count == 0 || y_list.Count == 0 || x_list.Count != y_list.Count)
+                    return null;
+
+                double[][] f = new double[x_list.Count - 1][];
+                for (int i = 0; i < f.Count(); i++)
+                    f[i] = new double[f.Count() - i];
+
+                for (int j = 0; j < f.Count(); j++)
+                {
+                    for (int i = 0; i < f.Count() - j; i++)
+                    {
+                        if (j == 0)
+                            f[j][i] = (y_list[i + 1] - y_list[i]) / (x_list[i + 1] - x_list[i]);
+                        else
+                            f[j][i] = (f[j - 1][i + 1] - f[j - 1][i]) / (x_list[i + 1 + j] - x_list[i]);
+                    }
+                }
+
+                string polynom = "L(x)=";
+                polynom += string.Format("{0}", y_list[0]);
+
+                for (int i = 0; i < f.Count(); i++)
+                {
+                    polynom += "+" + "\n" + "(";
+
+                    polynom += string.Format("{0}", f[i][0]);
+
+                    for (int j = i; j >= 0; j--)
+                        polynom += string.Format("*(x-{0})", x_list[j]);
+
+                    polynom += ")";
+                }
+
+                return polynom;
+            }
         }
 
         public abstract class Lab5

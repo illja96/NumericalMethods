@@ -670,9 +670,7 @@ namespace NumericalMethods
             string polynom = "";
 
             if (TabItem_lab4_newton.IsSelected == true)
-            {
-
-            }
+                polynom = Methods.Lab4.Newton_polynom(x_list, y_list);
             else
                 polynom = Methods.Lab4.Lagrange_polynom(x_list, y_list);
 
@@ -710,14 +708,14 @@ namespace NumericalMethods
                 MessageBox.Show("Некорректно задан X!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
-            double y = Methods.Lab4.Lagrange_polynom(x_list, y_list, x);
+            double y = double.NaN;
 
             if (TabItem_lab4_newton.IsSelected == true)
-            {
-
-            }
+                y = Methods.Lab4.Newton_polynom(x_list, y_list, x);
             else
-                MessageBox.Show(string.Format("[{0}:{1}]", x, y), "Вычисленая точка при помощи полинома", MessageBoxButton.OK, MessageBoxImage.Information);
+                y = Methods.Lab4.Lagrange_polynom(x_list, y_list, x);
+
+            MessageBox.Show(string.Format("[{0}:{1}]", x, y), "Вычисленая точка при помощи полинома", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }
