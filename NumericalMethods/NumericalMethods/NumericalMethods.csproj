@@ -97,22 +97,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="examples\lab1\1.26.xml" />
-    <Resource Include="examples\lab1\1.27.xml" />
-    <Resource Include="examples\lab1\1.28.xml" />
-    <Resource Include="examples\lab1\1.29.xml" />
-    <Resource Include="examples\lab1\1.30.xml" />
-    <Resource Include="examples\lab1\3.21.xml" />
-    <Resource Include="examples\lab1\3.27.xml" />
-    <Resource Include="examples\lab1\3.28.xml" />
-    <Resource Include="examples\lab1\3.29.xml" />
-    <Resource Include="examples\lab1\3.30.xml" />
-    <Resource Include="examples\lab1\3.8.xml" />
-    <Resource Include="examples\lab1\kashkarova_choose_main_el.xml" />
-    <Resource Include="examples\lab1\kashkarova_gauss_seidel.xml" />
-    <Resource Include="examples\lab1\khovansky_choose_main_el.xml" />
-    <Resource Include="examples\lab1\khovansky_gauss_seidel.xml" />
-    <Resource Include="examples\lab1\lis.xml" />
+    <Resource Include="examples\lab1_kashkarova_gauss_main.xml" />
+    <Resource Include="examples\lab1_kashkarova_gauss_seidel.xml" />
+    <Resource Include="examples\lab1_khovansky_gauss_main.xml" />
+    <Resource Include="examples\lab1_khovansky_gauss_seidel.xml" />
+    <Resource Include="examples\lab4_khovansky.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="examples\lab4_kashkarova.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

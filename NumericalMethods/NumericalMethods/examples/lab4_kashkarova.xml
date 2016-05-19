@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<XML_settings_lab4 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <lab4_points>
+    <ArrayOfDouble>
+      <double>-6</double>
+      <double>1.5</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>-4</double>
+      <double>3.5</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>-2</double>
+      <double>9.5</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>0</double>
+      <double>22.5</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>2</double>
+      <double>45.5</double>
+    </ArrayOfDouble>
+  </lab4_points>
+  <lab4_points_count>5</lab4_points_count>
+  <lab4_calculate_point>5</lab4_calculate_point>
+</XML_settings_lab4>

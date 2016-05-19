@@ -25,10 +25,13 @@ namespace NumericalMethods
     {
         public OpenFileDialog open_file;
         public SaveFileDialog save_file;
+
         public List<double[]> lab1_matrix;
 
         public Dictionary<string, Func<double, double>> lab2_functions;
         public Dictionary<string, Func<double, double>> lab2_d_functions;
+
+        public List<double[]> lab4_points;
 
         public UI()
         {
@@ -36,11 +39,14 @@ namespace NumericalMethods
 
             open_file = new OpenFileDialog();
             save_file = new SaveFileDialog();
+
             lab1_matrix = new List<double[]>();
+
+            textBox_lab1_gauss_seidel_accuracy.Text = ((double)0.001).ToString();
+
             lab2_functions = new Dictionary<string, Func<double, double>>();
             lab2_d_functions = new Dictionary<string, Func<double, double>>();
 
-            textBox_lab1_gauss_seidel_accuracy.Text = ((double)0.001).ToString();
             textBox_lab2_chords_accuracy.Text = ((double)0.001).ToString();
             textBox_lab2_newton_accuracy.Text = ((double)0.001).ToString();
 
@@ -52,6 +58,8 @@ namespace NumericalMethods
 
             comboBox_lab2_function.ItemsSource = lab2_functions.Keys.ToArray();
             comboBox_lab2_function.SelectedIndex = 0;
+
+            lab4_points = new List<double[]>();
         }
 
         private void MenuItem_open_file_Click(object sender, RoutedEventArgs e)
@@ -60,18 +68,44 @@ namespace NumericalMethods
             open_file.InitialDirectory = Directory.GetCurrentDirectory();
             open_file.Multiselect = false;
             open_file.Filter = "XML Files | *.xml";
-            open_file.FileName = "settings";
+            open_file.FileName = "lab" + (tabControl_lab.SelectedIndex + 1);
             open_file.ShowDialog();
         }
         private void open_file_FileOk(object sender, CancelEventArgs e)
         {
-            XML_settings settings;
+            object settings = null;
+            XmlSerializer settings_xml = null;
+
             try
             {
                 using (FileStream fs = new FileStream(open_file.FileName, FileMode.Open))
                 {
-                    XmlSerializer settings_xml = new XmlSerializer(typeof(XML_settings));
-                    settings = (XML_settings)settings_xml.Deserialize(fs);
+                    switch (tabControl_lab.SelectedIndex + 1)
+                    {
+                        case 1:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab1));
+                            settings = (XML_settings_lab1)settings_xml.Deserialize(fs);
+                            break;
+                        case 2:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab2));
+                            settings = (XML_settings_lab2)settings_xml.Deserialize(fs);
+                            break;
+                        case 3:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab3));
+                            settings = (XML_settings_lab3)settings_xml.Deserialize(fs);
+                            break;
+                        case 4:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab4));
+                            settings = (XML_settings_lab4)settings_xml.Deserialize(fs);
+                            break;
+                        case 5:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab5));
+                            settings = (XML_settings_lab5)settings_xml.Deserialize(fs);
+                            break;
+                        default:
+                            MessageBox.Show("Выберите вкладку для применения сохраненных настроек!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                    }
 
                     fs.Close();
                 }
@@ -82,26 +116,63 @@ namespace NumericalMethods
                 return;
             }
 
-            dataGrid_lab1_matrix_generate(settings.lab1_matrix.Length);
-            lab1_matrix = settings.lab1_matrix.ToList();
-            dataGrid_lab1_matrix.ItemsSource = lab1_matrix;
-            while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count + 1)
-                dataGrid_lab1_matrix.Columns.RemoveAt(lab1_matrix.Count + 1);
-            dataGrid_lab1_matrix.Items.Refresh();
+            try
+            {
+                switch (tabControl_lab.SelectedIndex + 1)
+                {
+                    case 1:
+                        dataGrid_lab1_matrix_generate((settings as XML_settings_lab1).lab1_matrix.Length);
+                        lab1_matrix = (settings as XML_settings_lab1).lab1_matrix.ToList();
+                        dataGrid_lab1_matrix.ItemsSource = lab1_matrix;
+                        while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count + 1)
+                            dataGrid_lab1_matrix.Columns.RemoveAt(lab1_matrix.Count + 1);
+                        dataGrid_lab1_matrix.Items.Refresh();
 
-            textBox_lab1_matrix_size.Text = settings.lab1_matrix_size;
+                        textBox_lab1_matrix_size.Text = (settings as XML_settings_lab1).lab1_matrix_size;
 
-            textBox_lab1_gauss_seidel_accuracy.Text = settings.lab1_gauss_seidel_accuracy;
+                        textBox_lab1_gauss_seidel_accuracy.Text = (settings as XML_settings_lab1).lab1_gauss_seidel_accuracy;
+                        break;
 
-            if (lab2_functions.ContainsKey(settings.lab2_function))
-                comboBox_lab2_function.SelectedItem = settings.lab2_function.ToString();
+                    case 2:
+                        if (lab2_functions.ContainsKey((settings as XML_settings_lab2).lab2_function))
+                            comboBox_lab2_function.SelectedItem = (settings as XML_settings_lab2).lab2_function.ToString();
 
-            textBox_lab2_chords_start_interval.Text = settings.lab2_chords_start_interval;
-            textBox_lab2_chords_end_interval.Text = settings.lab2_chords_end_interval;
-            textBox_lab2_chords_accuracy.Text = settings.lab2_chords_accuracy;
+                        textBox_lab2_chords_start_interval.Text = (settings as XML_settings_lab2).lab2_chords_start_interval;
+                        textBox_lab2_chords_end_interval.Text = (settings as XML_settings_lab2).lab2_chords_end_interval;
+                        textBox_lab2_chords_accuracy.Text = (settings as XML_settings_lab2).lab2_chords_accuracy;
 
-            textBox_lab2_newton_initial_approximation.Text = settings.lab2_newton_initial_approximation;
-            textBox_lab2_newton_accuracy.Text = settings.lab2_newton_accuracy;
+                        textBox_lab2_newton_initial_approximation.Text = (settings as XML_settings_lab2).lab2_newton_initial_approximation;
+                        textBox_lab2_newton_accuracy.Text = (settings as XML_settings_lab2).lab2_newton_accuracy;
+                        break;
+
+                    case 3:
+                        break;
+
+                    case 4:
+                        dataGrid_lab4_points_generate((settings as XML_settings_lab4).lab4_points.Length);
+                        lab4_points = (settings as XML_settings_lab4).lab4_points.ToList();
+                        dataGrid_lab4_points.ItemsSource = lab4_points;
+                        while (dataGrid_lab4_points.Columns.Count != 2)
+                            dataGrid_lab4_points.Columns.RemoveAt(2);
+                        dataGrid_lab4_points.Items.Refresh();
+
+                        textBox_lab4_points_count.Text = (settings as XML_settings_lab4).lab4_points_count;
+                        textBox_lab4_calculate_point.Text = (settings as XML_settings_lab4).lab4_calculate_point;
+                        break;
+
+                    case 5:
+                        break;
+
+                    default:
+                        MessageBox.Show("Ошибка при применении настроек!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                        return;
+                }
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Ошибка при применении настроек!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
         }
 
         private void MenuItem_save_file_Click(object sender, RoutedEventArgs e)
@@ -109,7 +180,7 @@ namespace NumericalMethods
             save_file.FileOk += save_file_FileOk;
             save_file.InitialDirectory = Directory.GetCurrentDirectory();
             save_file.Filter = "XML File | *.xml";
-            save_file.FileName = "settings";
+            save_file.FileName = "lab" + (tabControl_lab.SelectedIndex + 1);
             save_file.ShowDialog();
         }
         private void save_file_FileOk(object sender, CancelEventArgs e)
@@ -118,11 +189,42 @@ namespace NumericalMethods
             {
                 using (FileStream fs = new FileStream(save_file.FileName, FileMode.Create))
                 {
-                    XmlSerializer settings_xml = new XmlSerializer(typeof(XML_settings));
-                    XML_settings settings = new XML_settings(this);
+                    XmlSerializer settings_xml = null;
+                    object settings = null;
+
+                    switch (tabControl_lab.SelectedIndex + 1)
+                    {
+                        case 1:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab1));
+                            settings = new XML_settings_lab1(this);
+                            break;
+
+                        case 2:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab2));
+                            settings = new XML_settings_lab2(this);
+                            break;
+
+                        case 3:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab3));
+                            settings = new XML_settings_lab3(this);
+                            break;
+
+                        case 4:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab4));
+                            settings = new XML_settings_lab4(this);
+                            break;
+
+                        case 5:
+                            settings_xml = new XmlSerializer(typeof(XML_settings_lab5));
+                            settings = new XML_settings_lab5(this);
+                            break;
+
+                        default:
+                            MessageBox.Show("Выберите вкладку для сохранения настроек!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                            return;
+                    }
 
                     settings_xml.Serialize(fs, settings);
-
                     fs.Close();
                 }
             }
@@ -143,7 +245,7 @@ namespace NumericalMethods
             {
                 message = "Вычисленные корни:" + "\n";
                 message += string.Format("x = {0}", root);
-            }            
+            }
 
             MessageBox.Show(message, "Корни", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -239,12 +341,6 @@ namespace NumericalMethods
                 double[] b = dataGrid_lab1_matrix_get_b();
                 double accuracy;
 
-                if (Methods.Lab1.Is_diagonaly_dominant(x) == false)
-                {
-                    MessageBox.Show("Введенная матрица не обладает свойством диагонального преобладания!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-
                 try
                 {
                     accuracy = double.Parse(textBox_lab1_gauss_seidel_accuracy.Text);
@@ -256,14 +352,6 @@ namespace NumericalMethods
                 }
 
                 roots = Methods.Lab1.Gauss_seidel(x, b, accuracy);
-
-                /*
-                if (roots == null || roots.Length == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
-                {
-                    dataGrid_lab1_matrix_set_all(x, b);
-                    dataGrid_lab1_matrix.Items.Refresh();
-                }
-                */
             }
 
             if (roots == null || roots.Length == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
@@ -307,7 +395,6 @@ namespace NumericalMethods
 
             dataGrid_lab1_matrix.Items.Refresh();
         }
-
         private void dataGrid_lab1_matrix_generate(int size)
         {
             DataGridTextColumn column;
@@ -336,9 +423,7 @@ namespace NumericalMethods
 
 
             while (size + 1 != dataGrid_lab1_matrix.Columns.Count)
-            {
                 dataGrid_lab1_matrix.Columns.RemoveAt(dataGrid_lab1_matrix.Columns.Count - 1);
-            }
         }
         private double[][] dataGrid_lab1_matrix_get_x()
         {
@@ -482,6 +567,157 @@ namespace NumericalMethods
             }
 
             show_roots(root);
+        }
+
+        private void button_lab4_points_count_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                dataGrid_lab4_points.Columns.Clear();
+                lab4_points.Clear();
+
+                int size = int.Parse(textBox_lab4_points_count.Text);
+                dataGrid_lab4_points_generate(size);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректно задан размер генерируемой матрицы!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+        private void button_lab4_random_points_Click(object sender, RoutedEventArgs e)
+        {
+            if (lab4_points == null || lab4_points.Count == 0)
+            {
+                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Random rand = new Random();
+            for (int i = 0; i < lab4_points.Count; i++)
+            {
+                for (int j = 0; j < lab4_points[i].Length; j++)
+                    lab4_points[i][j] = rand.Next(-10, 10);
+            }
+
+            dataGrid_lab4_points.Items.Refresh();
+        }
+        private void dataGrid_lab4_points_generate(int size)
+        {
+            DataGridTextColumn column;
+            double[] row;
+
+            column = new DataGridTextColumn();
+            column.Header = "X";
+            column.Binding = new Binding("[0]");
+            dataGrid_lab4_points.Columns.Add(column);
+
+            column = new DataGridTextColumn();
+            column.Header = "Y";
+            column.Binding = new Binding("[1]");
+            dataGrid_lab4_points.Columns.Add(column);
+
+            for (int i = 0; i < size; i++)
+            {
+                row = new double[2];
+
+                for (int j = 0; j < 2; j++)
+                    row[j] = 0;
+
+                lab4_points.Add(row);
+            }
+
+            dataGrid_lab4_points.ItemsSource = lab4_points;
+            dataGrid_lab4_points.Items.Refresh();
+
+            while (dataGrid_lab4_points.Columns.Count != 2)
+                dataGrid_lab4_points.Columns.RemoveAt(2);
+        }
+        private double[] dataGrid_lab4_points_get_x()
+        {
+            if (lab4_points == null || lab4_points.Count == 0)
+                return null;
+
+            double[] x = new double[lab4_points.Count];
+            for (int i = 0; i < lab4_points.Count; i++)
+                x[i] = lab4_points[i][0];
+
+            return x;
+        }
+        private double[] dataGrid_lab4_points_get_y()
+        {
+            if (lab4_points == null || lab4_points.Count == 0)
+                return null;
+
+            double[] y = new double[lab4_points.Count];
+            for (int i = 0; i < lab4_points.Count; i++)
+                y[i] = lab4_points[i][1];
+
+            return y;
+        }
+
+        private void button_lab4_show_polynom_Click(object sender, RoutedEventArgs e)
+        {
+            if (lab4_points == null || lab4_points.Count == 0)
+            {
+                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            List<double> x_list = dataGrid_lab4_points_get_x().ToList();
+            List<double> y_list = dataGrid_lab4_points_get_y().ToList();
+
+            string polynom = "";
+
+            if (TabItem_lab4_newton.IsSelected == true)
+            {
+
+            }
+            else
+                polynom = Methods.Lab4.Lagrange_polynom(x_list, y_list);
+
+            switch (MessageBox.Show("Показать полином как график?", "Полином", MessageBoxButton.YesNo, MessageBoxImage.Question))
+            {
+                case MessageBoxResult.Yes:
+                    polynom = polynom.Replace("L(x)=", "");
+                    polynom = polynom.Replace("+", "%2B");
+                    System.Diagnostics.Process.Start(string.Format("{0}{1}", @"https://www.google.com.ua/search?q=", polynom));
+                    break;
+
+                case MessageBoxResult.No:
+                    MessageBox.Show(polynom, "Полином", MessageBoxButton.OK, MessageBoxImage.Information);
+                    break;
+            }
+        }
+        private void button_lab4_calculate_point_Click(object sender, RoutedEventArgs e)
+        {
+            if (lab4_points == null || lab4_points.Count == 0)
+            {
+                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            List<double> x_list = dataGrid_lab4_points_get_x().ToList();
+            List<double> y_list = dataGrid_lab4_points_get_y().ToList();
+            double x = double.NaN;
+
+            try
+            {
+                x = double.Parse(textBox_lab4_calculate_point.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректно задан X!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
+            double y = Methods.Lab4.Lagrange_polynom(x_list, y_list, x);
+
+            if (TabItem_lab4_newton.IsSelected == true)
+            {
+
+            }
+            else
+                MessageBox.Show(string.Format("[{0}:{1}]", x, y), "Вычисленая точка при помощи полинома", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

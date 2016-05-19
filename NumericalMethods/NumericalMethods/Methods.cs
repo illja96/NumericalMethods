@@ -125,34 +125,6 @@ namespace NumericalMethods
 
                 return true;
             }
-
-            public static bool Is_diagonaly_dominant(double[][] matrix)
-            {
-                if (matrix == null || matrix.Count() == 0 || matrix.LongCount() == 0)
-                    return false;
-
-                for (int i = 0; i < matrix.Count(); i++)
-                {
-                    if (Is_diagonaly_dominant(matrix[i], i) == false)
-                        return false;
-                }
-
-                return true;
-            }
-            private static bool Is_diagonaly_dominant(double[] row, int count)
-            {
-                if (row.Count() <= count)
-                    return false;
-
-                double sum = 0;
-                foreach (var e in row)
-                    sum += Math.Abs(e);
-
-                if (Math.Abs(row[count]) >= sum - Math.Abs(row[count]))
-                    return true;
-                else
-                    return false;
-            }
         }
 
         public abstract class Lab2
@@ -183,7 +155,76 @@ namespace NumericalMethods
                 return x1;
             }
         }
-        
-        
+
+        public abstract class Lab3
+        {
+
+        }
+
+        public abstract class Lab4
+        {
+            public static double Lagrange_polynom(List<double> x_list, List<double> y_list, double x)
+            {
+                if (x_list == null || y_list == null || x_list.Count == 0 || y_list.Count == 0 || x_list.Count != y_list.Count || double.IsNaN(x) == true)
+                    return double.NaN;
+
+                List<double> L = new List<double>();
+                for (int i = 0; i < x_list.Count; i++)
+                {
+                    double Li = 1;
+                    for (int j = 0; j < x_list.Count; j++)
+                    {
+                        if (i == j)
+                            continue;
+
+                        Li *= (x - x_list[j]) / (x_list[i] - x_list[j]);
+                    }
+                    L.Add(y_list[i] * Li);
+                }
+
+                return L.Sum();
+            }
+            public static string Lagrange_polynom(List<double> x_list, List<double> y_list)
+            {
+                if (x_list == null || y_list == null || x_list.Count == 0 || y_list.Count == 0 || x_list.Count != y_list.Count)
+                    return null;
+
+                string polynom = "L(x)=";
+
+                List<double> L = new List<double>();
+                for (int i = 0; i < x_list.Count; i++)
+                {
+                    polynom += string.Format("{0}*(", y_list[i]);
+
+                    for (int j = 0; j < x_list.Count; j++)
+                    {
+                        if (i == j)
+                            continue;
+
+                        polynom += string.Format("((x-{0})/{1})", x_list[j], x_list[i] - x_list[j]);
+
+                        if (j != x_list.Count - 1)
+                        {
+                            if (i == x_list.Count - 1 && j == i - 1)
+                                continue;
+                            else
+                                polynom += "*";
+                        }
+                    }
+
+                    polynom += ")";
+
+                    if (i != x_list.Count - 1)
+                        polynom += "+" + "\n";
+                }
+
+                return polynom;
+            }
+        }
+
+        public abstract class Lab5
+        {
+
+        }
     }
 }
