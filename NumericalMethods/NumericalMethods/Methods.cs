@@ -156,6 +156,25 @@ namespace NumericalMethods
             }
         }
 
+        public abstract class Lab3
+        {
+
+            public static double DiagonallySum(double[][] matrix)
+            {
+                double sum = 0;
+
+                for(int i = 0; i < matrix.Count(); i++)
+                {
+                    for (int j = 0; j < matrix.Count(); j++)
+                    {
+                        if (i == j) sum += matrix[i][j];
+                    }
+                }
+
+                return sum;
+            }
+        }
+
         public static double[][] Make_diagonaly_dominant(double[][] matrix)
         {
             if (Is_diagonaly_dominant(matrix) == true)
