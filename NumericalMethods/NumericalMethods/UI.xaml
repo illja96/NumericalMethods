@@ -99,8 +99,8 @@
                     <DataGrid Name="dataGrid_lab3_matrix" Margin="305,41,10,41"/>
                     <Button Name="button_lab3_random_matrix" Content="Заполнить случайными данными" Margin="305,0,10,10" VerticalAlignment="Bottom"  Height="26" Click="button_lab3_random_matrix_Click"/>
 
-                    <Button Name="button_lab3_calculate_values" Content="Вычислить собственные значения" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Margin="10,0,0,41" Click="button_lab3_calculate_values_Click"/>
-                    <Button Name="button_lab3_calculate_vectors" Content="Вычислить собственные вектора" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Click="button_lab3_calculate_vectors_Click" Margin="10,0,0,10"/>
+                    <Button Name="button_lab3_calculate_self_values" Content="Вычислить собственные значения" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Margin="10,0,0,41" Click="button_lab3_calculate_Click"/>
+                    <Button Name="button_lab3_calculate_self_vectors" Content="Вычислить собственные вектора" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Click="button_lab3_calculate_Click" Margin="10,0,0,10"/>
                 </Grid>
             </TabItem>
 

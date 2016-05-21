@@ -13,7 +13,7 @@ namespace NumericalMethods
         {
             public static double[] Gauss_main(double[][] matrix)
             {
-                int size = matrix.Length;
+                int size = matrix.Count();
                 double main = 0;
                 int m = 0;
                 int i = 0;
@@ -89,22 +89,22 @@ namespace NumericalMethods
 
             public static double[] Gauss_seidel(double[][] x, double[] b, double eps)
             {
-                double[] current_solution = new double[x.Length];
-                double[] previous_solution = new double[x.Length];
+                double[] current_solution = new double[x.Count()];
+                double[] previous_solution = new double[x.Count()];
 
                 do
                 {
-                    for (int i = 0; i < x.Length; i++)
+                    for (int i = 0; i < x.Count(); i++)
                         previous_solution[i] = current_solution[i];
 
-                    for (int i = 0; i < x.Length; i++)
+                    for (int i = 0; i < x.Count(); i++)
                     {
                         double var = 0;
 
                         for (int j = 0; j < i; j++)
                             var += (x[i][j] * current_solution[j]);
 
-                        for (int j = i + 1; j < x.Length; j++)
+                        for (int j = i + 1; j < x.Count(); j++)
                             var += (x[i][j] * previous_solution[j]);
 
                         current_solution[i] = (b[i] - var) / x[i][i];
@@ -117,7 +117,7 @@ namespace NumericalMethods
             private static bool Gauss_seidel_condition(double[] current_solution, double[] previous_solution, double eps)
             {
                 double norm = 0;
-                for (int i = 0; i < current_solution.Length; i++)
+                for (int i = 0; i < current_solution.Count(); i++)
                     norm += (current_solution[i] - previous_solution[i]) * (current_solution[i] - previous_solution[i]);
 
                 if (Math.Sqrt(norm) >= eps)
@@ -227,14 +227,135 @@ namespace NumericalMethods
 
                 return c;
             }
-
-            public static double[] Krylov_values(double[][] A, double start, double end, double eps)
+            private static double[][] Matrix_multiplication(double[][] a, double b)
             {
-                if (A == null || A.Count() == 0)
+                if (a == null || a.Count() == 0)
                     return null;
+
+                if (double.IsNaN(b) == true)
+                    return null;
+
+                double[][] c = new double[a.Count()][];
+
+                for (int i = 0; i < a.Count(); i++)
+                {
+                    c[i] = new double[a[i].Count()];
+
+                    for (int j = 0; j < a[i].Count(); j++)
+                        c[i][j] = a[i][j] * b;
+                }
+
+                return c;
+            }
+            private static double[] Matrix_multiplication(double[] a, double b)
+            {
+                if (a == null || a.Count() == 0)
+                    return null;
+
+                if (double.IsNaN(b) == true)
+                    return null;
+
+                double[] c = new double[a.Count()];
+
+                for (int i = 0; i < a.Count(); i++)
+                    c[i] = a[i] * b;
+
+                return c;
+            }
+
+            private static double[][] Matrix_addition(double[][] a, double[][] b)
+            {
+                if (a == null || a.Count() == 0)
+                    return null;
+
+                if (b == null || b.Count() == 0)
+                    return null;
+
+                if (a.LongCount() != b.LongCount())
+                    return null;
+
+                double[][] c = new double[a.Count()][];
+
+                for (int i = 0; i < c.Count(); i++)
+                {
+                    c[i] = new double[a[i].Count()];
+
+                    for (int j = 0; j < c[i].Count(); j++)
+                        c[i][j] = a[i][j] + b[i][j];
+                }
+
+                return c;
+            }
+            private static double[] Matrix_addition(double[] a, double[] b)
+            {
+                if (a == null || a.Count() == 0)
+                    return null;
+
+                if (b == null || b.Count() == 0)
+                    return null;
+
+                if (a.Count() != b.Count())
+                    return null;
+
+                double[] c = new double[a.Count()];
+
+                for (int i = 0; i < c.Count(); i++)
+                    c[i] = a[i] + b[i];
+
+                return c;
+            }
+            private static double[][] Matrix_subtraction(double[][] a, double[][] b)
+            {
+                if (a == null || a.Count() == 0)
+                    return null;
+
+                if (b == null || b.Count() == 0)
+                    return null;
+
+                if (a.LongCount() != b.LongCount())
+                    return null;
+
+                double[][] c = new double[a.Count()][];
+
+                for (int i = 0; i < c.Count(); i++)
+                {
+                    c[i] = new double[a[i].Count()];
+
+                    for (int j = 0; j < c[i].Count(); j++)
+                        c[i][j] = a[i][j] - b[i][j];
+                }
+
+                return c;
+            }
+            private static double[] Matrix_subtraction(double[] a, double[] b)
+            {
+                if (a == null || a.Count() == 0)
+                    return null;
+
+                if (b == null || b.Count() == 0)
+                    return null;
+
+                if (a.Count() != b.Count())
+                    return null;
+
+                double[] c = new double[a.Count()];
+
+                for (int i = 0; i < c.Count(); i++)
+                    c[i] = a[i] - b[i];
+
+                return c;
+            }
+
+            public static void Krylov(double[][] A, double start, double end, double eps, out double[] self_values, out double[][] self_vectors)
+            {
+                self_values = null;
+                self_vectors = null;
+
+                if (A == null || A.Count() == 0)
+                    return;
 
                 if (A.Count() != A[0].Count())
-                    return null;
+                    return;
 
                 double[][] y = new double[A.Count() + 1][];
                 for (int i = 0; i < y.Count(); i++)
@@ -255,66 +376,94 @@ namespace NumericalMethods
                     }
                 }
 
-                double[][] P = new double[y.Count() - 1][];
-                for (int i = 0; i < P.Count(); i++)
+                double[][] p_matrix = new double[y.Count() - 1][];
+                for (int i = 0; i < p_matrix.Count(); i++)
                 {
-                    P[i] = new double[P.Count() + 1];
+                    p_matrix[i] = new double[p_matrix.Count() + 1];
 
-                    for (int j = 0; j < P.Count(); j++)
+                    for (int j = 0; j < p_matrix.Count(); j++)
                     {
-                        P[i][j] = y[y.Count() - 2 - j][i];
+                        p_matrix[i][j] = y[y.Count() - 2 - j][i];
                     }
 
-                    P[i][P.Count()] = y[y.Count() - 1][i];
+                    p_matrix[i][p_matrix.Count()] = y[y.Count() - 1][i];
                 }
-                double[] P_roots = Lab1.Gauss_main(P);
+                double[] p = Lab1.Gauss_main(p_matrix);
 
                 Func<double, double> lambda_function = delegate (double lambda)
                 {
-                    double lambda_root = Math.Pow(lambda, P_roots.Count());
+                    double lambda_root = Math.Pow(lambda, p.Count());
 
-                    for (int i = 0; i < P_roots.Count() - 1; i++)
-                        lambda_root -= P_roots[i] * Math.Pow(lambda, P_roots.Count() - 1 - i);
+                    for (int i = 0; i < p.Count() - 1; i++)
+                        lambda_root -= p[i] * Math.Pow(lambda, p.Count() - 1 - i);
 
-                    lambda_root -= P_roots[P_roots.Count() - 1];
+                    lambda_root -= p[p.Count() - 1];
 
                     return lambda_root;
                 };
 
-                return Lab2.Chords_multi(lambda_function, P_roots.Count(), start, end, eps);
+                self_values = Lab2.Chords_multi(lambda_function, p.Count(), start, end, eps);
+
+                double[][] q = new double[self_values.Count()][];
+                for (int i = 0; i < q.Count(); i++)
+                {
+                    q[i] = new double[q.Count()];
+
+                    for (int j = 0; j < q[i].Count(); j++)
+                    {
+                        if (j == 0)
+                            q[i][j] = 1;
+                        else
+                            q[i][j] = self_values[i] * q[i][j - 1] - p[j - 1];
+                    }
+                }
+
+                double[][] x = new double[self_values.Count()][];
+                for (int i = 0; i < x.Count(); i++)
+                {
+                    x[i] = y[y.Count() - 2];
+
+                    for (int j = 0; j < x[i].Count() - 1; j++)
+                        x[i] = Matrix_addition(x[i], Matrix_multiplication(y[y.Count() - 3 - j], q[i][j + 1]));
+                }
+
+                self_vectors = x;
             }
 
-            public static double[] Verrier_values(double[][] A, double start, double end, double eps)
+            public static void Verrier(double[][] A, double start, double end, double eps, out double[] self_values, out double[][] self_vectors)
             {
+                self_values = null;
+                self_vectors = null;
+
                 if (A == null || A.Count() == 0)
-                    return null;
+                    return;
 
                 if (A.Count() != A[0].Count())
-                    return null;
+                    return;
 
                 double[][][] A_pows = new double[A.Count()][][];
                 A_pows[0] = A;
                 for (int i = 1; i < A_pows.Count(); i++)
                     A_pows[i] = Matrix_multiplication(A_pows[i - 1], A);
 
-                double[] Sp = new double[A_pows.Count()];
-                for (int i = 0; i < Sp.Count(); i++)
+                double[] S = new double[A_pows.Count()];
+                for (int i = 0; i < S.Count(); i++)
                 {
-                    Sp[i] = 0;
+                    S[i] = 0;
 
                     for (int j = 0; j < A_pows[i].Count(); j++)
-                        Sp[i] += A_pows[i][j][j];
+                        S[i] += A_pows[i][j][j];
                 }
 
                 double[] p = new double[A_pows.Count()];
-                p[0] = Sp[0];
+                p[0] = S[0];
                 for (int i = 1; i < p.Count(); i++)
                 {
                     p[i] = 1.0 / (i + 1.0);
 
-                    double pi = Sp[i];
+                    double pi = S[i];
                     for (int j = 0; j <= i - 1; j++)
-                        pi -= (p[j] * Sp[i - 1 - j]);
+                        pi -= (p[j] * S[i - 1 - j]);
                     p[i] *= pi;
                 }
 
@@ -330,8 +479,12 @@ namespace NumericalMethods
                     return lambda_root;
                 };
 
-                return Lab2.Chords_multi(lambda_function, p.Count(), start, end, eps);
+                self_values = Lab2.Chords_multi(lambda_function, p.Count(), start, end, eps);
+
+
             }
+
+            
         }
 
         public abstract class Lab4

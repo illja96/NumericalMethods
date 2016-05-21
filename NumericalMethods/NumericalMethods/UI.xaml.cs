@@ -125,7 +125,7 @@ namespace NumericalMethods
                 switch (tabControl_lab.SelectedIndex + 1)
                 {
                     case 1:
-                        dataGrid_lab1_matrix_generate((settings as XML_settings_lab1).lab1_matrix.Length);
+                        dataGrid_lab1_matrix_generate((settings as XML_settings_lab1).lab1_matrix.Count());
                         lab1_matrix = (settings as XML_settings_lab1).lab1_matrix.ToList();
                         dataGrid_lab1_matrix.ItemsSource = lab1_matrix;
                         while (dataGrid_lab1_matrix.Columns.Count != lab1_matrix.Count + 1)
@@ -150,7 +150,7 @@ namespace NumericalMethods
                         break;
 
                     case 3:
-                        dataGrid_lab3_matrix_generate((settings as XML_settings_lab3).lab3_matrix.Length);
+                        dataGrid_lab3_matrix_generate((settings as XML_settings_lab3).lab3_matrix.Count());
                         lab3_matrix = (settings as XML_settings_lab3).lab3_matrix.ToList();
                         dataGrid_lab3_matrix.ItemsSource = lab3_matrix;
                         while (dataGrid_lab3_matrix.Columns.Count != lab3_matrix.Count)
@@ -161,7 +161,7 @@ namespace NumericalMethods
                         break;
 
                     case 4:
-                        dataGrid_lab4_points_generate((settings as XML_settings_lab4).lab4_points.Length);
+                        dataGrid_lab4_points_generate((settings as XML_settings_lab4).lab4_points.Count());
                         lab4_points = (settings as XML_settings_lab4).lab4_points.ToList();
                         dataGrid_lab4_points.ItemsSource = lab4_points;
                         while (dataGrid_lab4_points.Columns.Count != 2)
@@ -265,31 +265,29 @@ namespace NumericalMethods
         {
             string message = "";
 
-            if (roots == null || roots.Length == 0)
-            {
+            if (roots == null || roots.Count() == 0)
                 message = "Корни отсутствуют";
-            }
             else
             {
                 message = "Вычисленные корни:" + "\n";
-                for (int i = 0; i < roots.Length; i++)
-                    message += string.Format("x{0} = {1}", i + 1, roots[i]) + (i != roots.Length - 1 ? "\n" : "");
+                for (int i = 0; i < roots.Count(); i++)
+                    message += string.Format("x{0} = {1}", i + 1, roots[i]) + (i != roots.Count() - 1 ? "\n" : "");
 
                 message += "\n\n" + "Корни в уравнении:" + "\n";
 
                 double[][] matrix = dataGrid_lab1_matrix_get_all();
                 int d = max_accuracy_by_matrix(lab1_matrix.ToArray());
 
-                for (int i = 0; i < roots.Length; i++)
+                for (int i = 0; i < roots.Count(); i++)
                 {
                     double row_sum = 0;
 
-                    for (int j = 0; j < roots.Length; j++)
+                    for (int j = 0; j < roots.Count(); j++)
                     {
                         message += string.Format("{0} * {1}", matrix[i][j], roots[j]);
                         row_sum += matrix[i][j] * roots[j];
 
-                        if (j == roots.Length - 1)
+                        if (j == roots.Count() - 1)
                         {
                             message += string.Format(" = {0} ~~ {1}", Math.Round(row_sum, d), matrix[i][j + 1]);
                             message += "\n";
@@ -366,7 +364,7 @@ namespace NumericalMethods
                 roots = Methods.Lab1.Gauss_seidel(x, b, accuracy);
             }
 
-            if (roots == null || roots.Length == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
+            if (roots == null || roots.Count() == 0 || roots.Contains(double.PositiveInfinity) || roots.Contains(double.NegativeInfinity) || roots.Contains(double.NaN))
             {
                 MessageBox.Show("Невозможно получить корни!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -401,7 +399,7 @@ namespace NumericalMethods
             Random rand = new Random();
             for (int i = 0; i < lab1_matrix.Count; i++)
             {
-                for (int j = 0; j < lab1_matrix[i].Length; j++)
+                for (int j = 0; j < lab1_matrix[i].Count(); j++)
                     lab1_matrix[i][j] = rand.Next(-10, 10);
             }
 
@@ -443,10 +441,10 @@ namespace NumericalMethods
                 return null;
 
             double[][] x = new double[lab1_matrix.Count][];
-            for (int i = 0; i < x.Length; i++)
+            for (int i = 0; i < x.Count(); i++)
             {
-                x[i] = new double[x.Length];
-                for (int j = 0; j < x.Length; j++)
+                x[i] = new double[x.Count()];
+                for (int j = 0; j < x.Count(); j++)
                     x[i][j] = lab1_matrix[i][j];
             }
 
@@ -458,8 +456,8 @@ namespace NumericalMethods
                 return null;
 
             double[] b = new double[lab1_matrix.Count];
-            for (int i = 0; i < b.Length; i++)
-                b[i] = lab1_matrix[i][b.Length];
+            for (int i = 0; i < b.Count(); i++)
+                b[i] = lab1_matrix[i][b.Count()];
 
             return b;
         }
@@ -469,10 +467,10 @@ namespace NumericalMethods
                 return null;
 
             double[][] x = new double[lab1_matrix.Count][];
-            for (int i = 0; i < x.Length; i++)
+            for (int i = 0; i < x.Count(); i++)
             {
-                x[i] = new double[x.Length + 1];
-                for (int j = 0; j < x.Length + 1; j++)
+                x[i] = new double[x.Count() + 1];
+                for (int j = 0; j < x.Count() + 1; j++)
                     x[i][j] = lab1_matrix[i][j];
             }
 
@@ -581,22 +579,50 @@ namespace NumericalMethods
             show_roots(root);
         }
 
-        private void show_values(double[] roots)
+        private void show_self_values(double[] roots)
         {
             string message = "";
 
-            if (roots == null || roots.Length == 0)
+            if (roots == null || roots.Count() == 0)
             {
                 message = "Собственные значения отсутствуют";
             }
             else
             {
                 message = "Вычисленные cобственные значения:" + "\n";
-                for (int i = 0; i < roots.Length; i++)
-                    message += string.Format("λ{0} = {1}", i + 1, roots[i]) + (i != roots.Length - 1 ? "\n" : "");
+                for (int i = 0; i < roots.Count(); i++)
+                    message += string.Format("λ{0} = {1}", i + 1, roots[i]) + (i != roots.Count() - 1 ? "\n" : "");
             }
 
             MessageBox.Show(message, "Собственные значения", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void show_self_vectors(double[][] vectors)
+        {
+            string message = "";
+
+            if (vectors == null || vectors.Count() == 0)
+                message = "Собственные вектора отсутствуют";
+            else
+            {
+                message = "Вычисленные cобственные вектора:" + "\n";
+
+                for (int i = 0; i < vectors.Count(); i++)
+                {
+                    message += string.Format("x{0} = (", i + 1);
+
+                    for (int j = 0; j < vectors[i].Count(); j++)
+                    {
+                        message += string.Format("{0}", vectors[i][j]);
+
+                        if (j == vectors[i].Count() - 1)
+                            message += ")" + "\n";
+                        else
+                            message += ", ";
+                    }
+                }
+            }
+
+            MessageBox.Show(message, "Собственные ветора", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void button_lab3_matrix_size_Click(object sender, RoutedEventArgs e)
         {
@@ -650,13 +676,13 @@ namespace NumericalMethods
             Random rand = new Random();
             for (int i = 0; i < lab3_matrix.Count; i++)
             {
-                for (int j = 0; j < lab3_matrix[i].Length; j++)
+                for (int j = 0; j < lab3_matrix[i].Count(); j++)
                     lab3_matrix[i][j] = rand.Next(-10, 10);
             }
 
             dataGrid_lab3_matrix.Items.Refresh();
         }
-        private void button_lab3_calculate_values_Click(object sender, RoutedEventArgs e)
+        private void button_lab3_calculate_Click(object sender, RoutedEventArgs e)
         {
             if (lab3_matrix == null || lab3_matrix.Count == 0)
             {
@@ -697,31 +723,18 @@ namespace NumericalMethods
                 return;
             }
 
-            double[] lambda = null;
+            double[] self_values = null;
+            double[][] self_vectors = null;
 
             if (TabItem_lab3_krylov.IsSelected == true)
-                lambda = Methods.Lab3.Krylov_values(A, start_interval, end_interval, accuracy);
+                Methods.Lab3.Krylov(A, start_interval, end_interval, accuracy, out self_values, out self_vectors);
             else
-                lambda = Methods.Lab3.Verrier_values(A, start_interval, end_interval, accuracy);
+                Methods.Lab3.Verrier(A, start_interval, end_interval, accuracy, out self_values, out self_vectors);
 
-            show_values(lambda);
-        }
-        private void button_lab3_calculate_vectors_Click(object sender, RoutedEventArgs e)
-        {
-            if (lab3_matrix == null || lab3_matrix.Count == 0)
-            {
-                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
-
-            if (TabItem_lab3_krylov.IsSelected == true)
-            {
-
-            }
+            if (sender.Equals(button_lab3_calculate_self_values) == true)
+                show_self_values(self_values);
             else
-            {
-
-            }
+                show_self_vectors(self_vectors);
         }
         private double[][] dataGrid_lab3_matrix_get_all()
         {
@@ -729,10 +742,10 @@ namespace NumericalMethods
                 return null;
 
             double[][] a = new double[lab3_matrix.Count][];
-            for (int i = 0; i < a.Length; i++)
+            for (int i = 0; i < a.Count(); i++)
             {
-                a[i] = new double[a.Length];
-                for (int j = 0; j < a.Length; j++)
+                a[i] = new double[a.Count()];
+                for (int j = 0; j < a.Count(); j++)
                     a[i][j] = lab3_matrix[i][j];
             }
 
@@ -766,7 +779,7 @@ namespace NumericalMethods
             Random rand = new Random();
             for (int i = 0; i < lab4_points.Count; i++)
             {
-                for (int j = 0; j < lab4_points[i].Length; j++)
+                for (int j = 0; j < lab4_points[i].Count(); j++)
                     lab4_points[i][j] = rand.Next(-10, 10);
             }
 
