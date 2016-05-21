@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<XML_settings_lab3 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <lab3_matrix>
+    <ArrayOfDouble>
+      <double>0</double>
+      <double>3</double>
+      <double>6</double>
+      <double>0</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>7</double>
+      <double>1</double>
+      <double>4</double>
+      <double>0</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>2</double>
+      <double>1</double>
+      <double>-2</double>
+      <double>0</double>
+    </ArrayOfDouble>
+  </lab3_matrix>
+  <lab3_matrix_size>3</lab3_matrix_size>
+</XML_settings_lab3>

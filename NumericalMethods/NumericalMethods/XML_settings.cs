@@ -59,6 +59,9 @@ namespace NumericalMethods
     [Serializable]
     public class XML_settings_lab3
     {
+        public double[][] lab3_matrix { get; set; }
+        public string lab3_matrix_size { get; set; }
+
         public XML_settings_lab3()
         {
 
@@ -66,7 +69,8 @@ namespace NumericalMethods
 
         public XML_settings_lab3(UI ui)
         {
-
+            this.lab3_matrix = ui.lab3_matrix.ToArray();
+            this.lab3_matrix_size = ui.textBox_lab3_matrix_size.Text;
         }
     }
 

@@ -17,7 +17,7 @@
         <TabControl Name="tabControl_lab" Margin="0,18,0,0">
             <TabItem Name="TabItem_lab1" Header="Лабораторная работа №1">
                 <Grid Background="#FFE5E5E5">
-                    <TabControl Name="tabControl_lab1" HorizontalAlignment="Left" Width="300" Margin="0,0,0,31">
+                    <TabControl Name="tabControl_lab1" HorizontalAlignment="Left" Width="290" Margin="10,10,0,41">
                         <TabItem Name="TabItem_lab1_gauss_main" Header="Метод Гаусса с выбором главного элемента">
                             <Grid Background="#FFE5E5E5"/>
                         </TabItem>
@@ -31,20 +31,20 @@
                         </TabItem>
                     </TabControl>
 
-                    <Label Name="label_lab1_matrix_size" Content="Размер: " HorizontalAlignment="Left" Margin="305,0,0,0" VerticalAlignment="Top"/>
-                    <TextBox Name="textBox_lab1_matrix_size" HorizontalAlignment="Left" Height="26" Margin="366,0,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Width="100"/>
-                    <Button Name="button_lab1_matrix_size" Content="Сгенерировать" Margin="471,0,0,0" VerticalAlignment="Top" Height="26" Click="button_lab1_matrix_size_Click"/>
+                    <Label Name="label_lab1_matrix_size" Content="Размер: " HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="textBox_lab1_matrix_size" HorizontalAlignment="Left" Height="26" Margin="366,10,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Width="90"/>
+                    <Button Name="button_lab1_matrix_size" Content="Сгенерировать" Margin="461,10,10,0" VerticalAlignment="Top" Height="26" Click="button_lab1_matrix_size_Click"/>
 
-                    <DataGrid Name="dataGrid_lab1_matrix" Margin="305,31,0,31"/>
+                    <DataGrid Name="dataGrid_lab1_matrix" Margin="305,41,10,41"/>
 
-                    <Button Name="button_lab1_random_matrix" Content="Заполнить случайными данными" Margin="305,0,0,0" VerticalAlignment="Bottom" Click="button_lab1_random_matrix_Click" Height="26"/>
-                    <Button Name="button_lab1_calculate" Content="Вычислить корни" VerticalAlignment="Bottom" Click="button_lab1_calculate_Click" HorizontalAlignment="Left" Width="300" Height="26"/>
+                    <Button Name="button_lab1_random_matrix" Content="Заполнить случайными данными" Margin="305,0,10,10" VerticalAlignment="Bottom" Click="button_lab1_random_matrix_Click" Height="26"/>
+                    <Button Name="button_lab1_calculate" Content="Вычислить корни" VerticalAlignment="Bottom" Click="button_lab1_calculate_Click" HorizontalAlignment="Left" Width="290" Height="26" Margin="10,0,0,10"/>
                 </Grid>
             </TabItem>
 
             <TabItem Name="TabItem_lab2" Header="Лабораторная работа №2">
                 <Grid Background="#FFE5E5E5">
-                    <TabControl Name="tabControl_lab2" Margin="0,0,0,31">
+                    <TabControl Name="tabControl_lab2" Margin="10,10,10,41">
                         <TabItem Name="TabItem_lab2_chords" Header="Метод Хорд">
                             <Grid Background="#FFE5E5E5">
                                 <Label Name="label_lab2_chords_start_interval" Content="Начало отрезка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
@@ -69,42 +69,58 @@
                         </TabItem>
                     </TabControl>
 
-                    <Button Name="button_lab2_calculate" Content="Вычислить корни" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300" Height="26" Click="button_lab2_calculate_Click"/>
+                    <Button Name="button_lab2_calculate" Content="Вычислить корни" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="290" Height="26" Click="button_lab2_calculate_Click" Margin="10,0,0,10"/>
 
-                    <Label Name="label_lab2_function" Content="Вид функции:" HorizontalAlignment="Left" Margin="305,0,0,0" VerticalAlignment="Bottom"/>
-                    <ComboBox Name="comboBox_lab2_function" Margin="394,0,0,0" VerticalAlignment="Bottom" Height="25"/>
+                    <Label Name="label_lab2_function" Content="Вид функции:" HorizontalAlignment="Left" Margin="305,0,0,10" VerticalAlignment="Bottom"/>
+                    <ComboBox Name="comboBox_lab2_function" Margin="394,0,10,10" VerticalAlignment="Bottom" Height="25"/>
                 </Grid>
             </TabItem>
 
             <TabItem Name="TabItem_lab3" Header="Лабораторная работа №3">
                 <Grid Background="#FFE5E5E5">
-                    <TabControl Name="tabControl_lab3">
+                    <TabControl Name="tabControl_lab3" Margin="10,10,0,165" HorizontalAlignment="Left" Width="290">
                         <TabItem Name="TabItem_lab3_verrier" Header="Метод Леверье">
                         </TabItem>
 
                         <TabItem Name="TabItem_lab3_krylov" Header="Метод Крылова">
                         </TabItem>
                     </TabControl>
+
+                    <Label Name="label_lab3_chords_start_interval" Content="Начало отрезка:" HorizontalAlignment="Left" Margin="10,0,0,134" VerticalAlignment="Bottom"/>
+                    <TextBox Name="textBox_lab3_chords_start_interval" Height="26" Margin="114,0,0,134" TextWrapping="Wrap" Text="-10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="186"/>
+                    <Label Name="label_lab3_chords_end_interval" Content="Конец отрезка:" HorizontalAlignment="Left" Margin="10,0,0,103" VerticalAlignment="Bottom"/>
+                    <TextBox Name="textBox_lab3_chords_end_interval" Height="26" Margin="114,0,0,103" TextWrapping="Wrap" Text="10" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="186"/>
+                    <Label Name="label_lab3_chords_accuracy" Content="Точность:" HorizontalAlignment="Left" Margin="10,0,0,72" VerticalAlignment="Bottom"/>
+                    <TextBox Name="textBox_lab3_chords_accuracy" Height="26" Margin="114,0,0,72" TextWrapping="Wrap" Text="0.001" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="186"/>
+
+                    <Label Name="label_lab3_matrix_size" Content="Размер: " HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="textBox_lab3_matrix_size" HorizontalAlignment="Left" Height="26" Margin="366,10,0,0" TextWrapping="Wrap" Text="3" VerticalAlignment="Top" Width="90"/>
+                    <Button Name="button_lab3_matrix_size" Content="Сгенерировать" Margin="461,10,10,0" VerticalAlignment="Top" Height="26" Click="button_lab3_matrix_size_Click" />
+                    <DataGrid Name="dataGrid_lab3_matrix" Margin="305,41,10,41"/>
+                    <Button Name="button_lab3_random_matrix" Content="Заполнить случайными данными" Margin="305,0,10,10" VerticalAlignment="Bottom"  Height="26" Click="button_lab3_random_matrix_Click"/>
+
+                    <Button Name="button_lab3_calculate_values" Content="Вычислить собственные значения" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Margin="10,0,0,41" Click="button_lab3_calculate_values_Click"/>
+                    <Button Name="button_lab3_calculate_vectors" Content="Вычислить собственные вектора" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Click="button_lab3_calculate_vectors_Click" Margin="10,0,0,10"/>
                 </Grid>
             </TabItem>
 
             <TabItem Name="TabItem_lab4" Header="Лабораторная работа №4">
                 <Grid Background="#FFE5E5E5">
-                    <TabControl Name="tabControl_lab4" Margin="0,0,0,61" HorizontalAlignment="Left" Width="300">
+                    <TabControl Name="tabControl_lab4" Margin="10,10,0,72" HorizontalAlignment="Left" Width="290">
                         <TabItem Name="TabItem_lab4_newton" Header="Интерполяционный полином Ньютона с разделенными разностями"/>
                         <TabItem Name="TabItem_lab4_lagrange" Header="Интерполяционный многочлен Лагранжа"/>
                     </TabControl>
-                    
-                    <Label Name="label_lab4_points_count" Content="Кол-во точек: " HorizontalAlignment="Left" Margin="305,0,0,0" VerticalAlignment="Top"/>
-                    <TextBox Name="textBox_lab4_points_count" HorizontalAlignment="Left" Height="26" Margin="399,0,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="67"/>
-                    <Button Name="button_lab4_points_count" Content="Сгенерировать" Margin="471,0,0,0" VerticalAlignment="Top" Height="26" Click="button_lab4_points_count_Click"/>
-                    <DataGrid Name="dataGrid_lab4_points" Margin="305,31,0,31"/>
-                    <Button Name="button_lab4_random_points" Content="Заполнить случайными данными" Margin="305,0,0,0" VerticalAlignment="Bottom" Height="26" Click="button_lab4_random_points_Click"/>
-                    
-                    <Button Name="button_lab4_calculate_point" Content="Вычислить значение при х = " Margin="0,0,0,30" VerticalAlignment="Bottom" Height="26" HorizontalAlignment="Left" Width="235" Click="button_lab4_calculate_point_Click"/>
-                    <TextBox Name="textBox_lab4_calculate_point" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="5" VerticalAlignment="Bottom" Width="60" Margin="240,0,0,30"/>
-                    <Button Name="button_lab4_show_polynom" Content="Показать полином" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="300" Height="26" Click="button_lab4_show_polynom_Click"/>
-                    
+
+                    <Label Name="label_lab4_points_count" Content="Кол-во точек: " HorizontalAlignment="Left" Margin="305,10,0,0" VerticalAlignment="Top"/>
+                    <TextBox Name="textBox_lab4_points_count" HorizontalAlignment="Left" Height="26" Margin="399,10,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="57"/>
+                    <Button Name="button_lab4_points_count" Content="Сгенерировать" Margin="461,10,10,0" VerticalAlignment="Top" Height="26" Click="button_lab4_points_count_Click"/>
+                    <DataGrid Name="dataGrid_lab4_points" Margin="305,41,10,41"/>
+                    <Button Name="button_lab4_random_points" Content="Заполнить случайными данными" Margin="305,0,10,10" VerticalAlignment="Bottom" Height="26" Click="button_lab4_random_points_Click"/>
+
+                    <Button Name="button_lab4_calculate_point" Content="Вычислить значение при х = " Margin="10,0,0,41" VerticalAlignment="Bottom" Height="26" HorizontalAlignment="Left" Width="225" Click="button_lab4_calculate_point_Click"/>
+                    <TextBox Name="textBox_lab4_calculate_point" HorizontalAlignment="Left" Height="26" TextWrapping="Wrap" Text="5" VerticalAlignment="Bottom" Width="60" Margin="240,0,0,41"/>
+                    <Button Name="button_lab4_show_polynom" Content="Показать полином" VerticalAlignment="Bottom" HorizontalAlignment="Left" Width="290" Height="26" Click="button_lab4_show_polynom_Click" Margin="10,0,0,10"/>
+
                 </Grid>
             </TabItem>
 

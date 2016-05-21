@@ -31,6 +31,8 @@ namespace NumericalMethods
         public Dictionary<string, Func<double, double>> lab2_functions;
         public Dictionary<string, Func<double, double>> lab2_d_functions;
 
+        public List<double[]> lab3_matrix;
+
         public List<double[]> lab4_points;
 
         public UI()
@@ -58,6 +60,8 @@ namespace NumericalMethods
 
             comboBox_lab2_function.ItemsSource = lab2_functions.Keys.ToArray();
             comboBox_lab2_function.SelectedIndex = 0;
+
+            lab3_matrix = new List<double[]>();
 
             lab4_points = new List<double[]>();
         }
@@ -146,6 +150,14 @@ namespace NumericalMethods
                         break;
 
                     case 3:
+                        dataGrid_lab3_matrix_generate((settings as XML_settings_lab3).lab3_matrix.Length);
+                        lab3_matrix = (settings as XML_settings_lab3).lab3_matrix.ToList();
+                        dataGrid_lab3_matrix.ItemsSource = lab3_matrix;
+                        while (dataGrid_lab3_matrix.Columns.Count != lab3_matrix.Count)
+                            dataGrid_lab3_matrix.Columns.RemoveAt(lab3_matrix.Count);
+                        dataGrid_lab3_matrix.Items.Refresh();
+
+                        textBox_lab3_matrix_size.Text = (settings as XML_settings_lab3).lab3_matrix_size;
                         break;
 
                     case 4:
@@ -569,6 +581,164 @@ namespace NumericalMethods
             show_roots(root);
         }
 
+        private void show_values(double[] roots)
+        {
+            string message = "";
+
+            if (roots == null || roots.Length == 0)
+            {
+                message = "Собственные значения отсутствуют";
+            }
+            else
+            {
+                message = "Вычисленные cобственные значения:" + "\n";
+                for (int i = 0; i < roots.Length; i++)
+                    message += string.Format("λ{0} = {1}", i + 1, roots[i]) + (i != roots.Length - 1 ? "\n" : "");
+            }
+
+            MessageBox.Show(message, "Собственные значения", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void button_lab3_matrix_size_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                dataGrid_lab3_matrix.Columns.Clear();
+                lab3_matrix.Clear();
+
+                int size = int.Parse(textBox_lab3_matrix_size.Text);
+                dataGrid_lab3_matrix_generate(size);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректно задан размер генерируемой матрицы!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+        private void dataGrid_lab3_matrix_generate(int size)
+        {
+            DataGridTextColumn column;
+            double[] row;
+            for (int i = 1; i <= size; i++)
+            {
+                column = new DataGridTextColumn();
+                column.Header = "";
+                column.Binding = new Binding("[" + (i - 1) + "]");
+                dataGrid_lab3_matrix.Columns.Add(column);
+
+                row = new double[size];
+                for (int j = 0; j < size; j++)
+                    row[j] = 0;
+
+                lab3_matrix.Add(row);
+            }
+
+            dataGrid_lab3_matrix.ItemsSource = lab3_matrix;
+            dataGrid_lab3_matrix.Items.Refresh();
+
+
+            while (size != dataGrid_lab3_matrix.Columns.Count)
+                dataGrid_lab3_matrix.Columns.RemoveAt(dataGrid_lab3_matrix.Columns.Count - 1);
+        }
+        private void button_lab3_random_matrix_Click(object sender, RoutedEventArgs e)
+        {
+            if (lab3_matrix == null || lab3_matrix.Count == 0)
+            {
+                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Random rand = new Random();
+            for (int i = 0; i < lab3_matrix.Count; i++)
+            {
+                for (int j = 0; j < lab3_matrix[i].Length; j++)
+                    lab3_matrix[i][j] = rand.Next(-10, 10);
+            }
+
+            dataGrid_lab3_matrix.Items.Refresh();
+        }
+        private void button_lab3_calculate_values_Click(object sender, RoutedEventArgs e)
+        {
+            if (lab3_matrix == null || lab3_matrix.Count == 0)
+            {
+                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            double[][] A = dataGrid_lab3_matrix_get_all();
+
+            double start_interval, end_interval, accuracy;
+            try
+            {
+                start_interval = double.Parse(textBox_lab2_chords_start_interval.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректно задано начало отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                end_interval = double.Parse(textBox_lab2_chords_end_interval.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректно задан конец отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            try
+            {
+                accuracy = double.Parse(textBox_lab2_newton_accuracy.Text);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Некорректно задана точность!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            double[] lambda = null;
+
+            if (TabItem_lab3_krylov.IsSelected == true)
+                lambda = Methods.Lab3.Krylov_values(A, start_interval, end_interval, accuracy);
+            else
+                lambda = Methods.Lab3.Verrier_values(A, start_interval, end_interval, accuracy);
+
+            show_values(lambda);
+        }
+        private void button_lab3_calculate_vectors_Click(object sender, RoutedEventArgs e)
+        {
+            if (lab3_matrix == null || lab3_matrix.Count == 0)
+            {
+                MessageBox.Show("Матрица не сгенерирована!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (TabItem_lab3_krylov.IsSelected == true)
+            {
+
+            }
+            else
+            {
+
+            }
+        }
+        private double[][] dataGrid_lab3_matrix_get_all()
+        {
+            if (lab3_matrix == null || lab3_matrix.Count == 0)
+                return null;
+
+            double[][] a = new double[lab3_matrix.Count][];
+            for (int i = 0; i < a.Length; i++)
+            {
+                a[i] = new double[a.Length];
+                for (int j = 0; j < a.Length; j++)
+                    a[i][j] = lab3_matrix[i][j];
+            }
+
+            return a;
+        }
+
         private void button_lab4_points_count_Click(object sender, RoutedEventArgs e)
         {
             try
@@ -674,7 +844,7 @@ namespace NumericalMethods
             else
                 polynom = Methods.Lab4.Lagrange_polynom(x_list, y_list);
 
-            switch (MessageBox.Show("Показать полином как график?", "Полином", MessageBoxButton.YesNo, MessageBoxImage.Question))
+            switch (MessageBox.Show("Показать полином как график?" + "\n" + "Требуется подключение к сети интернет", "Полином", MessageBoxButton.YesNo, MessageBoxImage.Question))
             {
                 case MessageBoxResult.Yes:
                     polynom = polynom.Replace("L(x)=", "");

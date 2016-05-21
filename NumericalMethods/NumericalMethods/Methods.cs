@@ -129,6 +129,23 @@ namespace NumericalMethods
 
         public abstract class Lab2
         {
+            public static double[] Chords_multi(Func<double, double> function, int roots_count, double a, double b, double eps)
+            {
+                List<double> roots = new List<double>();
+
+                for (double start = a; start < b; start += eps)
+                {
+                    if (function(start) * function(start + eps) > 0)
+                        continue;
+
+                    roots.Add(Chords(function, start, start + eps, eps * 2));
+                }
+
+                if (roots.Count() != roots_count)
+                    return Chords_multi(function, roots_count, a * 2, b * 2, eps);
+
+                return roots.ToArray();
+            }
             public static double Chords(Func<double, double> function, double a, double b, double eps)
             {
                 if (function(a) * function(b) > 0)
@@ -158,7 +175,163 @@ namespace NumericalMethods
 
         public abstract class Lab3
         {
+            private static double[][] Matrix_multiplication(double[][] a, double[][] b)
+            {
+                if (a == null || a.Count() == 0)
+                    return null;
 
+                if (b == null || b.Count() == 0)
+                    return null;
+
+                if (a[0].Count() != b.Count())
+                    return null;
+
+                int m = a.Count();
+                int n = a[0].Count();
+                int q = b[0].Count();
+
+                double[][] c = new double[m][];
+                for (int i = 0; i < c.Count(); i++)
+                    c[i] = new double[q];
+
+                for (int i = 0; i < m; i++)
+                {
+                    for (int j = 0; j < q; j++)
+                    {
+                        c[i][j] = 0;
+
+                        for (int r = 0; r < n; r++)
+                            c[i][j] += a[i][r] * b[r][j];
+                    }
+                }
+
+                return c;
+            }
+            private static double[] Matrix_multiplication(double[][] a, double[] b)
+            {
+                if (a == null || a.Count() == 0 || a.Count() != a[0].Count())
+                    return null;
+
+                if (b == null || b.Count() == 0 || a.Count() != b.Count())
+                    return null;
+
+                double[] c = new double[b.Count()];
+
+                for (int i = 0; i < c.Count(); i++)
+                {
+                    c[i] = 0;
+
+                    for (int j = 0; j < c.Count(); j++)
+                        c[i] += a[i][j] * b[j];
+                }
+
+                return c;
+            }
+
+            public static double[] Krylov_values(double[][] A, double start, double end, double eps)
+            {
+                if (A == null || A.Count() == 0)
+                    return null;
+
+                if (A.Count() != A[0].Count())
+                    return null;
+
+                double[][] y = new double[A.Count() + 1][];
+                for (int i = 0; i < y.Count(); i++)
+                {
+                    y[i] = new double[A.Count()];
+
+                    for (int j = 0; j < y[i].Count(); j++)
+                    {
+                        if (i == 0)
+                        {
+                            if (j == 0)
+                                y[i][j] = 1;
+                            else
+                                y[i][j] = 0;
+                        }
+                        else
+                            y[i] = Matrix_multiplication(A, y[i - 1]);
+                    }
+                }
+
+                double[][] P = new double[y.Count() - 1][];
+                for (int i = 0; i < P.Count(); i++)
+                {
+                    P[i] = new double[P.Count() + 1];
+
+                    for (int j = 0; j < P.Count(); j++)
+                    {
+                        P[i][j] = y[y.Count() - 2 - j][i];
+                    }
+
+                    P[i][P.Count()] = y[y.Count() - 1][i];
+                }
+                double[] P_roots = Lab1.Gauss_main(P);
+
+                Func<double, double> lambda_function = delegate (double lambda)
+                {
+                    double lambda_root = Math.Pow(lambda, P_roots.Count());
+
+                    for (int i = 0; i < P_roots.Count() - 1; i++)
+                        lambda_root -= P_roots[i] * Math.Pow(lambda, P_roots.Count() - 1 - i);
+
+                    lambda_root -= P_roots[P_roots.Count() - 1];
+
+                    return lambda_root;
+                };
+
+                return Lab2.Chords_multi(lambda_function, P_roots.Count(), start, end, eps);
+            }
+
+            public static double[] Verrier_values(double[][] A, double start, double end, double eps)
+            {
+                if (A == null || A.Count() == 0)
+                    return null;
+
+                if (A.Count() != A[0].Count())
+                    return null;
+
+                double[][][] A_pows = new double[A.Count()][][];
+                A_pows[0] = A;
+                for (int i = 1; i < A_pows.Count(); i++)
+                    A_pows[i] = Matrix_multiplication(A_pows[i - 1], A);
+
+                double[] Sp = new double[A_pows.Count()];
+                for (int i = 0; i < Sp.Count(); i++)
+                {
+                    Sp[i] = 0;
+
+                    for (int j = 0; j < A_pows[i].Count(); j++)
+                        Sp[i] += A_pows[i][j][j];
+                }
+
+                double[] p = new double[A_pows.Count()];
+                p[0] = Sp[0];
+                for (int i = 1; i < p.Count(); i++)
+                {
+                    p[i] = 1.0 / (i + 1.0);
+
+                    double pi = Sp[i];
+                    for (int j = 0; j <= i - 1; j++)
+                        pi -= (p[j] * Sp[i - 1 - j]);
+                    p[i] *= pi;
+                }
+
+                Func<double, double> lambda_function = delegate (double lambda)
+                {
+                    double lambda_root = Math.Pow(lambda, p.Count());
+
+                    for (int i = 0; i < p.Count() - 1; i++)
+                        lambda_root -= p[i] * Math.Pow(lambda, p.Count() - 1 - i);
+
+                    lambda_root -= p[p.Count() - 1];
+
+                    return lambda_root;
+                };
+
+                return Lab2.Chords_multi(lambda_function, p.Count(), start, end, eps);
+            }
         }
 
         public abstract class Lab4
