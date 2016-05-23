@@ -729,7 +729,12 @@ namespace NumericalMethods
             if (TabItem_lab3_krylov.IsSelected == true)
                 Methods.Lab3.Krylov(A, start_interval, end_interval, accuracy, out self_values, out self_vectors);
             else
-                Methods.Lab3.Verrier(A, start_interval, end_interval, accuracy, out self_values, out self_vectors);
+            {
+                if (sender.Equals(button_lab3_calculate_self_values) == true)
+                    Methods.Lab3.Verrier(A, start_interval, end_interval, accuracy, out self_values, out self_vectors);
+                else
+                    Methods.Lab3.Krylov(A, start_interval, end_interval, accuracy, out self_values, out self_vectors);
+            }
 
             if (sender.Equals(button_lab3_calculate_self_values) == true)
                 show_self_values(self_values);

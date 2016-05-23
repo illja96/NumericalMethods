@@ -126,6 +126,14 @@
 
             <TabItem Name="TabItem_lab5" Header="Лабораторная работа №5">
                 <Grid Background="#FFE5E5E5">
+                    <TabControl Name="TabControl_lab5" Margin="10">
+                        <TabItem Name="TabItem_lab5_picard" Header="Метод Пикара">
+
+                        </TabItem>
+                        <TabItem Name="TabItem_lab5_euler" Header="Модифицированный метод Эйлера">
+                            
+                        </TabItem>                        
+                    </TabControl>
                 </Grid>
             </TabItem>
         </TabControl>
