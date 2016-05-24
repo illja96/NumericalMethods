@@ -623,7 +623,7 @@ namespace NumericalMethods
 
         public abstract class Lab5
         {
-            public static double FuncForPicar(double x, double y)
+            public static double FuncForPicard(double x, double y)
             {
                 return 2 * y - 2 * Math.Pow(x, 2) - 3;
             }
@@ -633,24 +633,55 @@ namespace NumericalMethods
                 return Math.Pow(Math.E, (1 - x) * Math.Pow(Math.E, x)) - x * Math.Pow(Math.E, x) * y;
             }
 
-            public static List<double> ModifiedEyler(double x0, double xn, double h)
+            public static double IntegralSecondFunc(double x, double y)
             {
-                List<double> coordsList = new List<double>();
+                return 2 + Math.Pow(y, 2) - ((2 * Math.Pow(x, 3)) / 3) - 3 * x;
+            }
 
-                double y0 = 1;
-                double n = 0; double x = 0;
-                double curried_y = 0;
-                double y = y0; 
+            public static List<double> ModifiedEyler(double x0, double xn, double y0, double h)
+            {
+                double n = ((xn - x0) / h) + 1;
+                double x = x0;
+                double deltaY = 0;
+                double yd = 0;
 
-                n = (xn - x0) / (h + 1);
-                x = x0;
-                for(int i=1;i< n; i++)
+                List<double> Ys = new List<double>();
+                List<double> CurYs = new List<double>();
+                List<double> Xs = new List<double>();
+
+                Ys.Add(y0);
+                Xs.Add(x0);
+
+                for (int i = 1; i < n; i++)
                 {
-                    curried_y = y + 0.5 * h*(FuncForEyler(x, y) + FuncForEyler(x + 1, y + 1));
-                    x = x + h;
+                    CurYs.Add(FuncForEyler(Xs[i - 1], Ys[i - 1]));
+                    Xs.Add(Xs[i - 1] + h);
+                    yd = Ys[i - 1] + h * CurYs[i - 1];
+
+                    CurYs.Add(FuncForEyler(Xs[i], Ys[i - 1]));
+                    deltaY = (CurYs[0] + CurYs[i]) / 2;
+
+                    Ys.Add(Ys[i - 1] + h * deltaY);
+
                 }
 
-                return coordsList;
+                return Ys;
+            }
+
+            public static List<double> PicardMethod(int n)
+            {
+                List<double> Ys = new List<double>();
+
+                double x = 0;
+
+                Ys.Add(2);
+
+                for (int i = 1; i <= n; i++)
+                {
+                    Ys.Add(IntegralSecondFunc(x, Ys[i - 1]));
+                }
+
+                return Ys;
             }
         }
     }
