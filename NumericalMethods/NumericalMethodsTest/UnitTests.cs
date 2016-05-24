@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace NumericalMethodsTest
 {
@@ -28,6 +29,7 @@ namespace NumericalMethodsTest
     [TestClass]
     public class UnitTest_Lab4
     {
+        
         [TestMethod]
         public void Matrix_multiplication_test1()
         {
@@ -52,7 +54,7 @@ namespace NumericalMethodsTest
                     Assert.AreEqual(c[i][j], c_done[i][j]);
             }
         }
-
+        
         [TestMethod]
         public void Matrix_multiplication_test2()
         {
@@ -70,5 +72,6 @@ namespace NumericalMethodsTest
             for (int i = 0; i < c.Count(); i++)
                 Assert.AreEqual(c[i], c_done[i]);
         }
+        
     }
 }

@@ -623,7 +623,35 @@ namespace NumericalMethods
 
         public abstract class Lab5
         {
+            public static double FuncForPicar(double x, double y)
+            {
+                return 2 * y - 2 * Math.Pow(x, 2) - 3;
+            }
 
+            public static double FuncForEyler(double x, double y)
+            {
+                return Math.Pow(Math.E, (1 - x) * Math.Pow(Math.E, x)) - x * Math.Pow(Math.E, x) * y;
+            }
+
+            public static List<double> ModifiedEyler(double x0, double xn, double h)
+            {
+                List<double> coordsList = new List<double>();
+
+                double y0 = 1;
+                double n = 0; double x = 0;
+                double curried_y = 0;
+                double y = y0; 
+
+                n = (xn - x0) / (h + 1);
+                x = x0;
+                for(int i=1;i< n; i++)
+                {
+                    curried_y = y + 0.5 * h*(FuncForEyler(x, y) + FuncForEyler(x + 1, y + 1));
+                    x = x + h;
+                }
+
+                return coordsList;
+            }
         }
     }
 }
