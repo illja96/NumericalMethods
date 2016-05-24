@@ -623,9 +623,28 @@ namespace NumericalMethods
 
         public abstract class Lab5
         {
+            public static List<double[]> Picard(Func<double, double> i_function, double x_start, double x_end, double h)
+            {
+                if (i_function == null || double.IsNaN(x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
+                    return null;
+
+                if (x_start >= x_end)
+                    return null;
+
+                if (h <= 0)
+                    return null;
+
+                List<double[]> points = new List<double[]>();
+
+                for (double x = x_start; x < x_end; x += h)
+                    points.Add(new double[] { x, i_function(x) });
+
+                return points;
+            }
+
             public static List<double[]> Eyler(Func<double, double, double> function, double x_start, double y_x_start, double x_end, double h)
             {
-                if (function == null)
+                if (function == null || double.IsNaN(x_start) == true || double.IsNaN(y_x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
                     return null;
 
                 if (x_start >= x_end)
@@ -649,7 +668,7 @@ namespace NumericalMethods
 
             public static List<double[]> Modifie_Eyler(Func<double, double, double> function, double x_start, double y_x_start, double x_end, double h)
             {
-                if (function == null)
+                if (function == null || double.IsNaN(x_start) == true || double.IsNaN(y_x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
                     return null;
 
                 if (x_start >= x_end)
