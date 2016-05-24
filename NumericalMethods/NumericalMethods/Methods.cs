@@ -484,7 +484,7 @@ namespace NumericalMethods
 
             }
 
-            
+
         }
 
         public abstract class Lab4
@@ -623,65 +623,77 @@ namespace NumericalMethods
 
         public abstract class Lab5
         {
-            public static double FuncForPicard(double x, double y)
+            public static List<double[]> Picard(Func<double, double> i_function, double x_start, double x_end, double h)
             {
-                return 2 * y - 2 * Math.Pow(x, 2) - 3;
+                if (i_function == null || double.IsNaN(x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
+                    return null;
+
+                if (x_start >= x_end)
+                    return null;
+
+                if (h <= 0)
+                    return null;
+
+                List<double[]> points = new List<double[]>();
+
+                for (double x = x_start; x < x_end; x += h)
+                    points.Add(new double[] { x, i_function(x) });
+
+                return points;
             }
 
-            public static double FuncForEyler(double x, double y)
+            public static List<double[]> Eyler(Func<double, double, double> function, double x_start, double y_x_start, double x_end, double h)
             {
-                return Math.Pow(Math.E, (1 - x) * Math.Pow(Math.E, x)) - x * Math.Pow(Math.E, x) * y;
-            }
+                if (function == null || double.IsNaN(x_start) == true || double.IsNaN(y_x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
+                    return null;
 
-            public static double IntegralSecondFunc(double x, double y)
-            {
-                return 2 + Math.Pow(y, 2) - ((2 * Math.Pow(x, 3)) / 3) - 3 * x;
-            }
+                if (x_start >= x_end)
+                    return null;
 
-            public static List<double> ModifiedEyler(double x0, double xn, double y0, double h)
-            {
-                double n = ((xn - x0) / h) + 1;
-                double x = x0;
-                double deltaY = 0;
-                double yd = 0;
+                if (h <= 0)
+                    return null;
 
-                List<double> Ys = new List<double>();
-                List<double> CurYs = new List<double>();
-                List<double> Xs = new List<double>();
+                List<double[]> points = new List<double[]>();
+                points.Add(new double[] { x_start, y_x_start });
 
-                Ys.Add(y0);
-                Xs.Add(x0);
-
-                for (int i = 1; i < n; i++)
+                for (int i = 1; x_start + h * i <= x_end; i++)
                 {
-                    CurYs.Add(FuncForEyler(Xs[i - 1], Ys[i - 1]));
-                    Xs.Add(Xs[i - 1] + h);
-                    yd = Ys[i - 1] + h * CurYs[i - 1];
-
-                    CurYs.Add(FuncForEyler(Xs[i], Ys[i - 1]));
-                    deltaY = (CurYs[0] + CurYs[i]) / 2;
-
-                    Ys.Add(Ys[i - 1] + h * deltaY);
-
+                    double xi = x_start + i * h;
+                    double yi = points[i - 1][1] + h * function(points[i - 1][0], points[i - 1][1]);
+                    points.Add(new double[] { xi, yi });
                 }
 
-                return Ys;
+                return points;
             }
 
-            public static List<double> PicardMethod(int n)
+            public static List<double[]> Modifie_Eyler(Func<double, double, double> function, double x_start, double y_x_start, double x_end, double h)
             {
-                List<double> Ys = new List<double>();
+                if (function == null || double.IsNaN(x_start) == true || double.IsNaN(y_x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
+                    return null;
 
-                double x = 0;
+                if (x_start >= x_end)
+                    return null;
 
-                Ys.Add(2);
+                if (h <= 0)
+                    return null;
 
-                for (int i = 1; i <= n; i++)
+                List<double[]> points = new List<double[]>();
+                points.Add(new double[] { x_start, y_x_start });
+
+                List<double[]> mod_points = new List<double[]>();
+                mod_points.Add(new double[] { x_start, y_x_start });
+
+                for (int i = 1; x_start + h * i <= x_end; i++)
                 {
-                    Ys.Add(IntegralSecondFunc(x, Ys[i - 1]));
+                    double xi = x_start + i * h;
+                    double yi = mod_points[i - 1][1] + h * function(mod_points[i - 1][0], mod_points[i - 1][1]);
+                    points.Add(new double[] { xi, yi });
+
+                    yi = points[i - 1][1] + h / 2 * (function(points[i - 1][0], points[i - 1][1]) + function(points[i][0], points[i][1]));
+                    mod_points.Add(new double[] { xi, yi });
                 }
 
-                return Ys;
+                return mod_points;
             }
         }
     }

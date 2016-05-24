@@ -26,10 +26,10 @@ namespace NumericalMethodsTest
         }
     }
 
+    /*
     [TestClass]
     public class UnitTest_Lab4
-    {
-        
+    {        
         [TestMethod]
         public void Matrix_multiplication_test1()
         {
@@ -71,7 +71,33 @@ namespace NumericalMethodsTest
 
             for (int i = 0; i < c.Count(); i++)
                 Assert.AreEqual(c[i], c_done[i]);
+        }        
+    }
+    */
+
+    [TestClass]
+    public class UnitTest_Lab5
+    {
+        [TestMethod]
+        public void Eyler_test()
+        {
+            Func<double, double, double> function = delegate (double x, double y)
+            {
+                return 2 * Math.Pow(x, 2) + 2 * y;
+            };
+
+            List<double[]> points = NumericalMethods.Methods.Lab5.Eyler(function, 0, 1, 1, 0.1);
         }
-        
+
+        [TestMethod]
+        public void Modifie_Eyler_test()
+        {
+            Func<double, double, double> function = delegate (double x, double y)
+            {
+                return 2 * Math.Pow(x, 2) + 2 * y;
+            };
+
+            List<double[]> points = NumericalMethods.Methods.Lab5.Modifie_Eyler(function, 0, 1, 1, 0.1);
+        }
     }
 }

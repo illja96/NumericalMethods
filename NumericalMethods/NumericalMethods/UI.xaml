@@ -129,24 +129,60 @@
                     <TabControl Name="TabControl_lab5" Margin="10,10,10,45">
                         <TabItem Name="TabItem_lab5_picard" Header="Метод Пикара">
                             <Grid Background="#FFE5E5E5">
+                                <Label Name="label_lab5_picard_x0" Content="Начальное приближение:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_picard_x0" IsEnabled="False" Height="26" Margin="235,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0"/>
 
+                                <Label Name="label_lab5_picard_yx0" Content="Значение в начальном приближении:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_picard_yx0" IsEnabled="False" Height="26" Margin="235,41,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="2"/>
+
+                                <Label Name="label_lab5_picard_x_start" Content="Начало отрезка:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_picard_x_start" Height="26" Margin="235,72,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0"/>
+
+                                <Label Name="label_lab5_picard_x_end" Content="Конец отрезка:" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.269"/>
+                                <TextBox Name="textBox_lab5_picard_x_end" Height="26" Margin="235,103,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="1"/>
+
+                                <Label Name="label_lab5_picard_step" Content="Шаг:" HorizontalAlignment="Left" Margin="10,134,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_picard_step" Height="26" Margin="235,134,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0.1"/>
+                                
+                                <Label Name="label_lab5_picard_i_function" Content="Порядок приближение (1-5):" HorizontalAlignment="Left" Margin="10,165,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_picard_i_function" Height="26" Margin="235,165,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="5"/>
                             </Grid>
                         </TabItem>
-                        <TabItem Name="TabItem_lab5_euler" Header="Модифицированный метод Эйлера">
+                        <TabItem Name="TabItem_lab5_euler" Header="Метод Эйлера">
                             <Grid Background="#FFE5E5E5" Margin="0,0,0,-1">
-                                <TextBox x:Name="textBox_lab5_eyler_start_interval" HorizontalAlignment="Left" Height="26" Margin="112,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="438"/>
-                                <Label x:Name="label" Content="Начало отрезка" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-                                <TextBox x:Name="textBox_lab5_eyler_end_interval" HorizontalAlignment="Left" Height="26" Margin="112,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="438"/>
-                                <Label x:Name="label1" Content="Конец отрезка" HorizontalAlignment="Left" Margin="17,47,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.269"/>
-                                <Label x:Name="label2" Content="Шаг" HorizontalAlignment="Left" Margin="75,87,0,0" VerticalAlignment="Top"/>
-                                <TextBox x:Name="textBox_lab5_eyler_step" HorizontalAlignment="Left" Height="26" Margin="112,87,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="438"/>
+                                <Label Name="label_lab5_eyler_x_start" Content="Начало отрезка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_eyler_x_start" Height="26" Margin="178,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0"/>
 
+                                <Label Name="label_lab5_eyler_y_x_start" Content="Значение в начале отрезка:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_eyler_y_x_start" Height="26" Margin="178,41,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="2"/>
+
+                                <Label Name="label_lab5_eyler_x_end" Content="Конец отрезка:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.269"/>
+                                <TextBox Name="textBox_lab5_eyler_x_end" Height="26" Margin="178,72,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="1"/>
+
+                                <Label Name="label_lab5_eyler_step" Content="Шаг:" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_eyler_step" Height="26" Margin="178,103,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0.1"/>
+                            </Grid>
+                        </TabItem>
+                        <TabItem Name="TabItem_lab5_mod_euler" Header="Модифицированный метод Эйлера">
+                            <Grid Background="#FFE5E5E5" Margin="0,0,0,-1">
+                                <Label Name="label_lab5_mod_eyler_x_start" Content="Начало отрезка:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_mod_eyler_x_start" Height="26" Margin="178,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0"/>
+
+                                <Label Name="label_lab5_mod_eyler_y_x_start" Content="Значение в начале отрезка:" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_mod_eyler_y_x_start" Height="26" Margin="178,41,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="2"/>
+
+                                <Label Name="label_lab5_mod_eyler_x_end" Content="Конец отрезка:" HorizontalAlignment="Left" Margin="10,72,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.269"/>
+                                <TextBox Name="textBox_lab5_mod_eyler_x_end" Height="26" Margin="178,72,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="1"/>
+
+                                <Label Name="label_lab5_mod_eyler_step" Content="Шаг:" HorizontalAlignment="Left" Margin="10,103,0,0" VerticalAlignment="Top"/>
+                                <TextBox Name="textBox_lab5_mod_eyler_step" Height="26" Margin="178,103,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Text="0.1"/>
                             </Grid>
                         </TabItem>
                     </TabControl>
-                    <Button x:Name="button_lab5_calculate_roots" Content="Вычислить корни" HorizontalAlignment="Left" Margin="10,267,0,0" VerticalAlignment="Top" Width="256" Height="26"/>
-                    <ComboBox x:Name="comboBox" HorizontalAlignment="Left" Margin="387,267,0,0" VerticalAlignment="Top" Width="189" Height="26"/>
-                    <Label x:Name="label3" Content="Вид функции" HorizontalAlignment="Left" Margin="300,267,0,0" VerticalAlignment="Top"/>
+
+                    <Button Name="button_lab5_calculate_points" Content="Вычислить точки" HorizontalAlignment="Left" Margin="10,267,0,0" VerticalAlignment="Top" Width="290" Height="26" Click="button_lab5_calculate_points_Click"/>
+                    <ComboBox Name="comboBox_lab5_function" HorizontalAlignment="Left" Margin="392,267,0,0" VerticalAlignment="Top" Width="179" Height="26"/>
+                    <Label Name="label_lab5_function" Content="Вид функции" HorizontalAlignment="Left" Margin="305,267,0,0" VerticalAlignment="Top"/>
                 </Grid>
             </TabItem>
         </TabControl>
