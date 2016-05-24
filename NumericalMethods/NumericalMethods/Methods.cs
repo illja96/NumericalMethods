@@ -484,7 +484,7 @@ namespace NumericalMethods
 
             }
 
-            
+
         }
 
         public abstract class Lab4
@@ -640,17 +640,53 @@ namespace NumericalMethods
                 double y0 = 1;
                 double n = 0; double x = 0;
                 double curried_y = 0;
-                double y = y0; 
+                double y = y0;
 
                 n = (xn - x0) / (h + 1);
                 x = x0;
-                for(int i=1;i< n; i++)
+                for (int i = 1; i < n; i++)
                 {
-                    curried_y = y + 0.5 * h*(FuncForEyler(x, y) + FuncForEyler(x + 1, y + 1));
+                    curried_y = y + 0.5 * h * (FuncForEyler(x, y) + FuncForEyler(x + 1, y + 1));
                     x = x + h;
                 }
 
                 return coordsList;
+            }
+
+            public static List<double[]> Eyler(Func<double, double, double> function, double x_start, double y_x_start, double x_end, double h)
+            {
+                List<double[]> points = new List<double[]>();
+                points.Add(new double[] { x_start, y_x_start });
+
+                for (int i = 1; x_start + h * i <= x_end; i++)
+                {
+                    double xi = x_start + i * h;
+                    double yi = points[i - 1][1] + h * function(points[i - 1][0], points[i - 1][1]);
+                    points.Add(new double[] { xi, yi });
+                }
+
+                return points;
+            }
+
+            public static List<double[]> Modifie_Eyler(Func<double, double, double> function, double x_start, double y_x_start, double x_end, double h)
+            {
+                List<double[]> points = new List<double[]>();
+                points.Add(new double[] { x_start, y_x_start });
+
+                List<double[]> mod_points = new List<double[]>();
+                mod_points.Add(new double[] { x_start, y_x_start });
+
+                for (int i = 1; x_start + h * i <= x_end; i++)
+                {
+                    double xi = x_start + i * h;
+                    double yi = mod_points[i - 1][1] + h * function(mod_points[i - 1][0], mod_points[i - 1][1]);
+                    points.Add(new double[] { xi, yi });
+
+                    yi = points[i - 1][1] + h / 2 * (function(points[i - 1][0], points[i - 1][1]) + function(points[i][0], points[i][1]));
+                    mod_points.Add(new double[] { xi, yi });
+                }
+
+                return mod_points;
             }
         }
     }
