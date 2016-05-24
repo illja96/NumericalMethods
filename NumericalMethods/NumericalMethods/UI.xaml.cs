@@ -35,6 +35,8 @@ namespace NumericalMethods
 
         public List<double[]> lab4_points;
 
+        public Dictionary<string, Func<double, double, double>> lab5_functions;
+
         public UI()
         {
             InitializeComponent();
@@ -49,21 +51,34 @@ namespace NumericalMethods
             lab2_functions = new Dictionary<string, Func<double, double>>();
             lab2_d_functions = new Dictionary<string, Func<double, double>>();
 
-            textBox_lab2_chords_accuracy.Text = ((double)0.001).ToString();
-            textBox_lab2_newton_accuracy.Text = ((double)0.001).ToString();
-
             lab2_functions.Add(" 4: x^3 - x^2 + 3 = 0", delegate (double x) { return Math.Pow(x, 3) - Math.Pow(x, 2) + 3; });
             lab2_d_functions.Add(" 4: x^3 - x^2 + 3 = 0", delegate (double x) { return 3 * Math.Pow(x, 2) - 2 * x; });
 
             lab2_functions.Add("19: x^3 + x^2 + 2 = 0", delegate (double x) { return Math.Pow(x, 3) + Math.Pow(x, 2) + 2; });
             lab2_d_functions.Add("19: x^3 + x^2 + 2 = 0", delegate (double x) { return 3 * Math.Pow(x, 2) + 2 * x; });
 
+
+            textBox_lab2_chords_accuracy.Text = ((double)0.001).ToString();
+            textBox_lab2_newton_accuracy.Text = ((double)0.001).ToString();
+
             comboBox_lab2_function.ItemsSource = lab2_functions.Keys.ToArray();
             comboBox_lab2_function.SelectedIndex = 0;
 
             lab3_matrix = new List<double[]>();
 
+            textBox_lab3_chords_accuracy.Text = ((double)0.001).ToString();
+
             lab4_points = new List<double[]>();
+
+            lab5_functions = new Dictionary<string, Func<double, double, double>>();
+
+            lab5_functions.Add("y' = 2y - 2x^2 - 3", delegate (double x, double y) { return 2 * y - 2 * Math.Pow(x, 2) - 3; });
+
+            comboBox_lab5_function.ItemsSource = lab5_functions.Keys.ToArray();
+            comboBox_lab5_function.SelectedIndex = 0;
+
+            textBox_lab5_eyler_step.Text = ((double)0.1).ToString();
+            textBox_lab5_mod_eyler_step.Text = ((double)0.1).ToString();
         }
 
         private void MenuItem_open_file_Click(object sender, RoutedEventArgs e)
@@ -904,6 +919,96 @@ namespace NumericalMethods
                 y = Methods.Lab4.Lagrange_polynom(x_list, y_list, x);
 
             MessageBox.Show(string.Format("[{0}:{1}]", x, y), "Вычисленая точка при помощи полинома", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        public void show_points(List<double[]> points)
+        {
+            string message = "";
+
+            if (points == null || points.Count() == 0)
+            {
+                message = "Приближенные точки отсутствуют";
+            }
+            else
+            {
+                message = "Приближенные точки:" + "\n";
+                for (int i = 0; i < points.Count(); i++)
+                    message += string.Format("[{0} ; {1}]", points[i][0], points[i][1]) + (i != points.Count() - 1 ? "\n" : "");
+            }
+
+            MessageBox.Show(message, "Собственные значения", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        private void button_lab5_calculate_points_Click(object sender, RoutedEventArgs e)
+        {
+            if (TabItem_lab5_picard.IsSelected == true)
+            {
+
+            }
+            else
+            {
+                double x_start, y_x_start, x_end, step;
+                try
+                {
+                    if (TabItem_lab5_euler.IsSelected == true)
+                        x_start = double.Parse(textBox_lab5_eyler_x_start.Text);
+                    else
+                        x_start = double.Parse(textBox_lab5_mod_eyler_x_start.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Некорректно задано начало отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                try
+                {
+                    if (TabItem_lab5_euler.IsSelected == true)
+                        y_x_start = double.Parse(textBox_lab5_eyler_y_x_start.Text);
+                    else
+                        y_x_start = double.Parse(textBox_lab5_mod_eyler_y_x_start.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Некорректно задано значение в начале отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                try
+                {
+                    if (TabItem_lab5_euler.IsSelected == true)
+                        x_end = double.Parse(textBox_lab5_eyler_x_end.Text);
+                    else
+                        x_end = double.Parse(textBox_lab5_mod_eyler_x_end.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Некорректно задан конерц отрезка!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                try
+                {
+                    if (TabItem_lab5_euler.IsSelected == true)
+                        step = double.Parse(textBox_lab5_eyler_step.Text);
+                    else
+                        step = double.Parse(textBox_lab5_mod_eyler_step.Text);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Некорректно задано шаг!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                Func<double, double, double> function = lab5_functions[comboBox_lab5_function.SelectedValue.ToString()];
+
+                List<double[]> points;
+                if (TabItem_lab5_euler.IsSelected == true)
+                    points = Methods.Lab5.Eyler(function, x_start, y_x_start, x_end, step);
+                else
+                    points = Methods.Lab5.Modifie_Eyler(function, x_start, y_x_start, x_end, step);
+
+                show_points(points);
+            }
         }
     }
 }
