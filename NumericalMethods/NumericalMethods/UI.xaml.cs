@@ -89,7 +89,7 @@ namespace NumericalMethods
             lab5_i4_functions.Add("y' = 2y - 2x^2 - 3", delegate (double x) { return (x * (45 * x - 6 * Math.Pow(x, 4) - 2 * Math.Pow(x, 5) + 45)) / 45 + 2; });
             lab5_i5_functions.Add("y' = 2y - 2x^2 - 3", delegate (double x) { return Math.Pow(x, 2) - (2 * Math.Pow(x, 6)) / 45 - (4 * Math.Pow(x, 7)) / 315 + x + 2; });
 
-            lab5_functions.Add("y' = e^((1 - x) * e^x) - x * e^x * y", delegate(double x, double y) { return Math.Pow(Math.E, (1 - x) * Math.Pow(Math.E, x)) - x * Math.Pow(Math.E, x) * y; });
+            lab5_functions.Add("y' = e^((1 - x) * e^x) - x * e^x * y", delegate (double x, double y) { return Math.Pow(Math.E, (1 - x) * Math.Pow(Math.E, x)) - x * Math.Pow(Math.E, x) * y; });
 
             comboBox_lab5_function.ItemsSource = lab5_functions.Keys.ToArray();
             comboBox_lab5_function.SelectedIndex = 0;
@@ -970,7 +970,7 @@ namespace NumericalMethods
                     x_start = double.Parse(textBox_lab5_eyler_x_start.Text);
                 if (TabItem_lab5_mod_euler.IsSelected == true)
                     x_start = double.Parse(textBox_lab5_mod_eyler_x_start.Text);
-                if(TabItem_lab5_picard.IsSelected == true)
+                if (TabItem_lab5_picard.IsSelected == true)
                     x_start = double.Parse(textBox_lab5_picard_x_start.Text);
             }
             catch (Exception)
@@ -1044,42 +1044,48 @@ namespace NumericalMethods
                 if (number_i_function < 1 || number_i_function > 5)
                     throw new Exception();
             }
-            catch(Exception)
+            catch (Exception)
             {
                 MessageBox.Show("Некорректно задан порядок приближения!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            Func<double, double, double> function = function = lab5_functions[comboBox_lab5_function.SelectedValue.ToString()];
+            Func<double, double, double> function = null;
             Func<double, double> i_function = null;
-            try
+
+            if (TabItem_lab5_picard.IsSelected == true)
             {
-                switch (number_i_function)
+                try
                 {
-                    case 1:
-                        i_function = lab5_i1_functions[comboBox_lab5_function.SelectedValue.ToString()];
-                        break;
-                    case 2:
-                        i_function = lab5_i2_functions[comboBox_lab5_function.SelectedValue.ToString()];
-                        break;
-                    case 3:
-                        i_function = lab5_i3_functions[comboBox_lab5_function.SelectedValue.ToString()];
-                        break;
-                    case 4:
-                        i_function = lab5_i4_functions[comboBox_lab5_function.SelectedValue.ToString()];
-                        break;
-                    case 5:
-                        i_function = lab5_i5_functions[comboBox_lab5_function.SelectedValue.ToString()];
-                        break;
-                    default:
-                        return;
+                    switch (number_i_function)
+                    {
+                        case 1:
+                            i_function = lab5_i1_functions[comboBox_lab5_function.SelectedValue.ToString()];
+                            break;
+                        case 2:
+                            i_function = lab5_i2_functions[comboBox_lab5_function.SelectedValue.ToString()];
+                            break;
+                        case 3:
+                            i_function = lab5_i3_functions[comboBox_lab5_function.SelectedValue.ToString()];
+                            break;
+                        case 4:
+                            i_function = lab5_i4_functions[comboBox_lab5_function.SelectedValue.ToString()];
+                            break;
+                        case 5:
+                            i_function = lab5_i5_functions[comboBox_lab5_function.SelectedValue.ToString()];
+                            break;
+                        default:
+                            return;
+                    }
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Для данной функции отсутствуют приближения!" + "\n" + "Попробуйте другую функцию", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
             }
-            catch(Exception)
-            {
-                MessageBox.Show("Для данной функции отсутствуют приближения!" + "\n" + "Попробуйте другую функцию", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return;
-            }
+            else
+                function = lab5_functions[comboBox_lab5_function.SelectedValue.ToString()];
 
             List<double[]> points = null;
             if (TabItem_lab5_euler.IsSelected == true)
