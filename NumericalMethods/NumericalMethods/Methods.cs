@@ -623,6 +623,21 @@ namespace NumericalMethods
 
         public abstract class Lab5
         {
+            public static double IFunc_First(double x)
+            {
+                return 2 * Math.Pow(Math.E, x) + x * Math.E - 2 * x * Math.Pow(Math.E, x);
+            }
+
+            public static double IFunc_Second(double x)
+            {
+                return Math.Pow(Math.E, 2 * x) + Math.Pow(Math.E, x + 1) * (2 * x - 2) - 2 * x * Math.Pow(Math.E, 2 * x) + Math.Pow(x, 2) * Math.Pow(Math.E, 2 * x) + Math.E * (x + 2) - Math.Pow(x, 2) * Math.E * Math.Pow(Math.E, x) + 1;
+            }
+
+            public static double IFunc_Third(double x)
+            {
+                return (Math.Pow(Math.E, 3 * x) / 3) + ((11 * Math.E) / 8) - ((11 * Math.Pow(Math.E, 2 * x + 1)) / 8) + Math.Pow(Math.E, x) - ((7 * Math.Pow(x, 2) * Math.Pow(Math.E, 2 * x + 1)) / 4) + ((Math.Pow(x, 3) * Math.Pow(Math.E, 2 * x + 1)) / 2) - x * Math.Pow(Math.E, 3 * x) + x * Math.E + ((11 * x * Math.Pow(Math.E, 2 * x + 1)) / 4) + Math.Pow(x, 2) * Math.Pow(Math.E, 3 * x) - ((Math.Pow(x, 3) * Math.Pow(Math.E, 3 * x)) / 3) - Math.Pow(x, 2) * Math.Pow(Math.E, x + 1) - x * Math.Pow(Math.E, x) + 2 / 3;
+            }
+
             public static List<double[]> Picard(Func<double, double> i_function, double x_start, double x_end, double h)
             {
                 if (i_function == null || double.IsNaN(x_start) == true || double.IsNaN(x_end) == true || double.IsNaN(h) == true)
