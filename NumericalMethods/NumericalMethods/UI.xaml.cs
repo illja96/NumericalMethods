@@ -954,7 +954,7 @@ namespace NumericalMethods
                     message += string.Format("[{0} ; {1}]", points[i][0], points[i][1]) + (i != points.Count() - 1 ? "\n" : "");
             }
 
-            MessageBox.Show(message, "Собственные значения", MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show(message, "Приближенные точки", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         private void button_lab5_calculate_points_Click(object sender, RoutedEventArgs e)
         {
