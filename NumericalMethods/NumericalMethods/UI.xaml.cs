@@ -90,6 +90,9 @@ namespace NumericalMethods
             lab5_i5_functions.Add("y' = 2y - 2x^2 - 3", delegate (double x) { return Math.Pow(x, 2) - (2 * Math.Pow(x, 6)) / 45 - (4 * Math.Pow(x, 7)) / 315 + x + 2; });
 
             lab5_functions.Add("y' = e^(1 - x) * e^x - x * e^x * y", delegate (double x, double y) { return Math.Pow(Math.E, (1 - x)) * Math.Pow(Math.E, x) - x * Math.Pow(Math.E, x) * y; });
+            lab5_i1_functions.Add("y' = e^(1 - x) * e^x - x * e^x * y", delegate (double x) { return 2 * Math.Pow(Math.E, x) + x * Math.E - 2 * x * Math.Pow(Math.E, x); });
+            lab5_i2_functions.Add("y' = e^(1 - x) * e^x - x * e^x * y", delegate (double x) { return Math.Pow(Math.E, 2 * x) + Math.Pow(Math.E, x + 1) * (2 * x - 2) - 2 * x * Math.Pow(Math.E, 2 * x) + Math.Pow(x, 2) * Math.Pow(Math.E, 2 * x) + Math.E * (x + 2) - Math.Pow(x, 2) * Math.E * Math.Pow(Math.E, x) + 1; });
+            lab5_i3_functions.Add("y' = e^(1 - x) * e^x - x * e^x * y", delegate (double x) { return (Math.Pow(Math.E, 3 * x) / 3) + ((11 * Math.E) / 8) - ((11 * Math.Pow(Math.E, 2 * x + 1)) / 8) + Math.Pow(Math.E, x) - ((7 * Math.Pow(x, 2) * Math.Pow(Math.E, 2 * x + 1)) / 4) + ((Math.Pow(x, 3) * Math.Pow(Math.E, 2 * x + 1)) / 2) - x * Math.Pow(Math.E, 3 * x) + x * Math.E + ((11 * x * Math.Pow(Math.E, 2 * x + 1)) / 4) + Math.Pow(x, 2) * Math.Pow(Math.E, 3 * x) - ((Math.Pow(x, 3) * Math.Pow(Math.E, 3 * x)) / 3) - Math.Pow(x, 2) * Math.Pow(Math.E, x + 1) - x * Math.Pow(Math.E, x) + 2 / 3; });
 
             comboBox_lab5_function.ItemsSource = lab5_functions.Keys.ToArray();
             comboBox_lab5_function.SelectedIndex = 0;
@@ -1075,12 +1078,12 @@ namespace NumericalMethods
                             i_function = lab5_i5_functions[comboBox_lab5_function.SelectedValue.ToString()];
                             break;
                         default:
-                            return;
+                            throw new Exception();
                     }
                 }
                 catch (Exception)
                 {
-                    MessageBox.Show("Для данной функции отсутствуют приближения!" + "\n" + "Попробуйте другую функцию", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Для данной функции отсутствуют приближения данного порядка или вовсе!" + "\n" + "Попробуйте уменьшить порядок приближение или попробуйте другую функцию", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
             }
@@ -1109,8 +1112,6 @@ namespace NumericalMethods
                     string polynom = Methods.Lab4.Newton_polynom(x_points, y_points);
                     polynom = polynom.Replace("L(x)=", "");
                     polynom = polynom.Replace("+", "%2B");
-                    //polynom += "%2C+";
-                    //polynom += comboBox_lab5_function.SelectedValue.ToString().Replace("y' = ", "");
                     System.Diagnostics.Process.Start(string.Format("{0}{1}", @"https://www.google.com.ua/search?q=", polynom));
                     break;
 
