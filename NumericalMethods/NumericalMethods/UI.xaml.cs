@@ -89,7 +89,7 @@ namespace NumericalMethods
             lab5_i4_functions.Add("y' = 2y - 2x^2 - 3", delegate (double x) { return (x * (45 * x - 6 * Math.Pow(x, 4) - 2 * Math.Pow(x, 5) + 45)) / 45 + 2; });
             lab5_i5_functions.Add("y' = 2y - 2x^2 - 3", delegate (double x) { return Math.Pow(x, 2) - (2 * Math.Pow(x, 6)) / 45 - (4 * Math.Pow(x, 7)) / 315 + x + 2; });
 
-            lab5_functions.Add("y' = e^((1 - x) * e^x) - x * e^x * y", delegate (double x, double y) { return Math.Pow(Math.E, (1 - x) * Math.Pow(Math.E, x)) - x * Math.Pow(Math.E, x) * y; });
+            lab5_functions.Add("y' = e^(1 - x) * e^x - x * e^x * y", delegate (double x, double y) { return Math.Pow(Math.E, (1 - x)) * Math.Pow(Math.E, x) - x * Math.Pow(Math.E, x) * y; });
 
             comboBox_lab5_function.ItemsSource = lab5_functions.Keys.ToArray();
             comboBox_lab5_function.SelectedIndex = 0;
@@ -1095,7 +1095,29 @@ namespace NumericalMethods
             if (TabItem_lab5_picard.IsSelected == true)
                 points = Methods.Lab5.Picard(i_function, x_start, x_end, step);
 
-            show_points(points);
+            List<double> x_points = new List<double>();
+            List<double> y_points = new List<double>();
+            for (int i = 0; i < points.Count(); i++)
+            {
+                x_points.Add(points[i][0]);
+                y_points.Add(points[i][1]);
+            }
+
+            switch (MessageBox.Show("Показать приближенные точки как график?" + "\n" + "Требуется подключение к сети интернет", "Приближенные точки", MessageBoxButton.YesNo, MessageBoxImage.Question))
+            {
+                case MessageBoxResult.Yes:
+                    string polynom = Methods.Lab4.Newton_polynom(x_points, y_points);
+                    polynom = polynom.Replace("L(x)=", "");
+                    polynom = polynom.Replace("+", "%2B");
+                    //polynom += "%2C+";
+                    //polynom += comboBox_lab5_function.SelectedValue.ToString().Replace("y' = ", "");
+                    System.Diagnostics.Process.Start(string.Format("{0}{1}", @"https://www.google.com.ua/search?q=", polynom));
+                    break;
+
+                case MessageBoxResult.No:
+                    show_points(points);
+                    break;
+            }            
         }
     }
 }
